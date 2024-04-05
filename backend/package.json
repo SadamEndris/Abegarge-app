@@ -1,0 +1,14 @@
+{
+  "name": "abegarage-backend",
+  "version": "1.0.0",
+  "description": "digitalizing a car service company ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sadam-Endro",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
