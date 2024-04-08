@@ -83,7 +83,7 @@ input:disabled {
   font-weight: 300;
   vertical-align: super;
 }
-.checkbox-in-form input[type="checkbox"] {
+.checkbox-in-form input[type='checkbox'] {
   width: 20px;
   height: 20px;
 }
@@ -211,7 +211,7 @@ input:disabled {
 .service-item.checkbox-holder {
   box-shadow: rgba(149, 157, 165, 0.2) 0px 2px 5px;
 }
-.checkbox-holder input[type="checkbox"] {
+.checkbox-holder input[type='checkbox'] {
   width: 40px;
   height: 40px;
 }
@@ -233,7 +233,7 @@ input:disabled {
 .service-block-one .text span {
   color: #000821;
 }
-.contact-form input[type="number"] {
+.contact-form input[type='number'] {
   display: block;
   width: 100%;
   line-height: 28px;
