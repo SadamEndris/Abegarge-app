@@ -148,7 +148,7 @@ function Footer() {
       <div className="auto-container">
         <div className="footer-bottom">
           <div className="copyright-text">
-            © Copyright <a href="#">Abe Garage</a> 2023 . All right reserved.
+            © Copyright <a href="#">Abe Garage</a> 2024 . All right reserved.
           </div>
         </div>
       </div>
