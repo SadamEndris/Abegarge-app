@@ -23,6 +23,7 @@ async function createEmployee(req, res, next) {
       } else {
         return res.status(200).json({
           status: 'Employee added successfully',
+          // data: employee,
         });
       }
     } catch (error) {

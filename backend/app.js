@@ -32,3 +32,15 @@ app.listen(PORT, () => {
 
 // export the webserver for use in the application
 module.exports = app;
+
+
+
+// used to generate hashed password
+// const bcrypt = require('bcrypt');
+// const saltRounds = 10;  // data processing time
+// var password = '12345678';
+
+// Combined function to generate salt and hash
+// bcrypt.hash(password, saltRounds, function (err, hash) {
+//   console.log(`Hash: ${hash}`);
+// });
