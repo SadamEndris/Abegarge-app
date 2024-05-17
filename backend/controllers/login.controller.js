@@ -21,16 +21,17 @@ async function logIn(req, res, next) {
       //   console.log(employee.message);
     }
     // If successful, send a response to the client
+    // prepare the payload object
     const payload = {
       employee_email: employee.data.employee_email,
-      employee_role: employee.data.company_role_id,
+      employee_role: employee.data.employee_role_id,
       employee_first_name: employee.data.employee_first_name,
     };
     // encrypt the payload object
     const token = jwt.sign(payload, jwtSecret, {
-      expiresIn: '24h',
+      expiresIn: '30d',
     });
-    console.log(token);
+    console.log('Generated token:', token);
     const sendBack = {
       employee_token: token,
     };

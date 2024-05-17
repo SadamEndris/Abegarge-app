@@ -18,6 +18,7 @@ async function logIn(employeeData) {
       };
       return returnData;
     }
+    // Compare the password
     const passwordMatch = await bcrypt.compare(
       employeeData.employee_password,
       employee[0].employee_password_hashed
@@ -35,7 +36,11 @@ async function logIn(employeeData) {
     };
     return returnData;
   } catch (error) {
-    console.log(error);
+    console.error('Error in login service:', error);
+    return {
+      status: 'fail',
+      message: 'An error occurred during the login process.',
+    };
   }
 }
 
