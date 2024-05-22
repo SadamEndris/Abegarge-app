@@ -11,7 +11,7 @@ async function installDirectFromApi() {
 
   // Query file
   const queryfile = __dirname + '/sql/initial-queries.sql';
-  console.log(queryfile);
+  // console.log(queryfile);
   let templine = '';
   // Read in entire file
   const lines = await fs.readFileSync(queryfile, 'utf-8').split('\n');
@@ -38,7 +38,7 @@ async function installDirectFromApi() {
   //Loop through the queries and execute them one by one asynchrounously
   for (let i = 0; i < queries.length; i++) {
     try {
-      console.log(queries);
+      // console.log(queries);
       const result = await connection.query(queries[i]);
       console.log('Table created');
     } catch (err) {
