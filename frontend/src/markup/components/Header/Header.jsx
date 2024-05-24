@@ -1,6 +1,23 @@
+// Import the Link component from react-router-dom
+import { Link } from 'react-router-dom';
 // Import the logo image
 import logo from '../../../assets/images/logo.png';
+// Import the login service to access the logout function
+import loginService from '../../../services/login.service';
+// import the custom context hook
+import { useAuth } from '../../../Context/AuthContext';
 function Header() {
+  // Use the custom hook to access the data in the context
+  const { isLogged, setIsLogged, employee } = useAuth();
+  // console.log(useAuth());
+
+  // Log out event handler function
+  const logOut = () => {
+    // Call the logout function from the login service
+    loginService.logOut();
+    // Set the isLogged state to false
+    setIsLogged(false);
+  };
   return (
     <div>
       <header className="main-header header-style-one">
@@ -14,9 +31,18 @@ function Header() {
                 </div>
               </div>
               <div className="right-column">
-                <div className="phone-number">
-                  Schedule Your Appontment Today :<strong>1800 456 7890</strong>
-                </div>
+                {isLogged ? (
+                  <div className="link-btn">
+                    <div className="phone-number">
+                      Welcome :<strong> {employee?.employee_first_name}</strong>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="phone-number">
+                    Schedule Appointment:
+                    <strong>1800 456 7890 </strong>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -59,11 +85,23 @@ function Header() {
                   </nav>
                 </div>
                 <div className="search-btn"></div>
-                <div className="link-btn">
-                  <a href="/login" className="theme-btn btn-style-one">
-                    Login
-                  </a>
-                </div>
+                {isLogged ? (
+                  <div className="link-btn">
+                    <Link
+                      to="/"
+                      className="theme-btn btn-style-one blue"
+                      onClick={logOut}
+                    >
+                      Log out
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="link-btn">
+                    <Link to="/login" className="theme-btn btn-style-one">
+                      Login
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

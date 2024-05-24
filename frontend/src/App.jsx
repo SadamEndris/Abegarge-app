@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './markup/pages/Home';
 import Login from './markup/pages/Login';
 import AddEmployee from './markup/pages/admin/AddEmployee';
+import Unauthorized from './markup/pages/Unauthorized';
 
 // Import the css files
 import './assets/template_assets/css/bootstrap.css';
@@ -25,6 +26,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="/admin/add-employee" element={<AddEmployee />} />
       </Routes>
       <Footer />
