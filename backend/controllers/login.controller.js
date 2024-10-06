@@ -25,7 +25,7 @@ async function logIn(req, res, next) {
     const payload = {
       employee_id: employee.data.employee_id,
       employee_email: employee.data.employee_email,
-      employee_role: employee.data.employee_role_id,
+      employee_role: employee.data.company_role_id,
       employee_first_name: employee.data.employee_first_name,
       employee_last_name: employee.data.employee_last_name,
     };

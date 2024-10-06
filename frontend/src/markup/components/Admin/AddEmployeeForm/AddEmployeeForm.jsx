@@ -1,21 +1,21 @@
-import { useState } from 'react';
-import employeeService from '../../../../services/employee.service';
+import { useState } from "react";
+import employeeService from "../../../../services/employee.service";
 
 function AddEmployeeForm() {
-  const [employee_email, setEmail] = useState('');
-  const [employee_first_name, setFirstName] = useState('');
-  const [employee_last_name, setLastName] = useState('');
-  const [employee_phone, setPhoneNumber] = useState('');
-  const [employee_password, setPassword] = useState('');
+  const [employee_email, setEmail] = useState("");
+  const [employee_first_name, setFirstName] = useState("");
+  const [employee_last_name, setLastName] = useState("");
+  const [employee_phone, setPhoneNumber] = useState("");
+  const [employee_password, setPassword] = useState("");
   const [active_employee] = useState(1);
   const [company_role_id, setCompany_role_id] = useState(1);
 
   // Errors
-  const [emailError, setEmailError] = useState('');
-  const [firstNameRequired, setFirstNameRequired] = useState('');
-  const [passwordError, setPasswordError] = useState('');
+  const [emailError, setEmailError] = useState("");
+  const [firstNameRequired, setFirstNameRequired] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [success, setSuccess] = useState(false);
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,33 +23,33 @@ function AddEmployeeForm() {
     let valid = true;
 
     if (!employee_first_name) {
-      setFirstNameRequired('First name is required');
+      setFirstNameRequired("First name is required");
       valid = false;
     } else {
-      setFirstNameRequired('');
+      setFirstNameRequired("");
     }
 
     if (!employee_email) {
-      setEmailError('Email is required');
+      setEmailError("Email is required");
       valid = false;
-    } else if (!employee_email.includes('@')) {
-      setEmailError('Invalid email format');
+    } else if (!employee_email.includes("@")) {
+      setEmailError("Invalid email format");
       valid = false;
     } else {
       const regex = /^\S+@\S+\.\S+$/;
       if (!regex.test(employee_email)) {
-        setEmailError('Invalid email format');
+        setEmailError("Invalid email format");
         valid = false;
       } else {
-        setEmailError('');
+        setEmailError("");
       }
     }
 
     if (!employee_password || employee_password.length < 6) {
-      setPasswordError('Password must be at least 6 characters long');
+      setPasswordError("Password must be at least 6 characters long");
       valid = false;
     } else {
-      setPasswordError('');
+      setPasswordError("");
     }
 
     if (!valid) {
@@ -74,9 +74,9 @@ function AddEmployeeForm() {
           setServerError(data.error);
         } else {
           setSuccess(true);
-          setServerError('');
+          setServerError("");
           setTimeout(() => {
-            window.location.href = '/';
+            window.location.href = "/";
           }, 2000);
         }
       })
@@ -162,7 +162,7 @@ function AddEmployeeForm() {
                         name="employee_role"
                         value={company_role_id}
                         onChange={(event) =>
-                          setCompany_role_id(event.target.value)
+                          setCompany_role_id(parseInt(event.target.value, 10))
                         }
                         className="custom-select-box"
                       >
