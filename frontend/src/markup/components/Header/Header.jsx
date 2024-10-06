@@ -1,15 +1,15 @@
 // Import the Link component from react-router-dom
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 // Import the logo image
-import logo from '../../../assets/images/logo.png';
+import logo from "../../../assets/images/logo.png";
 // Import the login service to access the logout function
-import loginService from '../../../services/login.service';
+import loginService from "../../../services/login.service";
 // import the custom context hook
-import { useAuth } from '../../../Context/AuthContext';
+import { useAuth } from "../../../Context/AuthContext";
 function Header() {
   // Use the custom hook to access the data in the context
   const { isLogged, setIsLogged, employee } = useAuth();
-  // console.log(useAuth());
+  // console.log(useAuth()); 
 
   // Log out event handler function
   const logOut = () => {
@@ -34,7 +34,7 @@ function Header() {
                 {isLogged ? (
                   <div className="link-btn">
                     <div className="phone-number">
-                      Welcome :<strong> {employee?.employee_first_name}</strong>
+                      Welcome:<strong> {employee?.employee_first_name}</strong>
                     </div>
                   </div>
                 ) : (

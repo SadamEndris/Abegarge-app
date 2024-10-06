@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import loginService from '../../../services/login.service';
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import loginService from "../../../services/login.service";
 
 function LoginForm() {
   // const navigate = useNavigate();
   const location = useLocation();
-  const [employee_email, setEmail] = useState('');
-  const [employee_password, setPassword] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [serverError, setServerError] = useState('');
+  const [employee_email, setEmail] = useState("");
+  const [employee_password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [serverError, setServerError] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,25 +17,25 @@ function LoginForm() {
     let valid = true; // Flag
     // Email validation
     if (!employee_email) {
-      setEmailError('Please enter your email address first');
+      setEmailError("Please enter your email address first");
       valid = false;
-    } else if (!employee_email.includes('@')) {
-      setEmailError('Invalid email format');
+    } else if (!employee_email.includes("@")) {
+      setEmailError("Invalid email format");
     } else {
       const regex = /^\S+@\S+\.\S+$/;
       if (!regex.test(employee_email)) {
-        setEmailError('Invalid email format');
+        setEmailError("Invalid email format");
         valid = false;
       } else {
-        setEmailError('');
+        setEmailError("");
       }
     }
     // Password has to be at least 6 characters long
     if (!employee_password || employee_password.length < 6) {
-      setPasswordError('Password must be at least 6 characters long');
+      setPasswordError("Password must be at least 6 characters long");
       valid = false;
     } else {
-      setPasswordError('');
+      setPasswordError("");
     }
     if (!valid) {
       return;
@@ -53,20 +53,20 @@ function LoginForm() {
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
-        if (response.status === 'success') {
+        if (response.status === "success") {
           // Save the user in the local storage
           if (response.data.employee_token) {
             console.log(response.data);
-            localStorage.setItem('employee', JSON.stringify(response.data));
+            localStorage.setItem("employee", JSON.stringify(response.data));
           }
           // Redirect the user to the dashboard
           // navigate('/admin');
-          console.log(location);
-          if (location.pathname === '/login') {
+          // console.log(location);
+          if (location.pathname === "/login") {
             // navigate('/admin');
             // window.location.replace('/admin');
             // To home for now
-            window.location.replace('/');
+            window.location.replace("/");
           } else {
             window.location.reload();
           }
@@ -77,7 +77,7 @@ function LoginForm() {
       })
       .catch((err) => {
         console.log(err);
-        setServerError('An error has occurred. Please try again later.' + err);
+        setServerError("An error has occurred. Please try again later." + err);
       });
   };
 

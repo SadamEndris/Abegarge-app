@@ -27,7 +27,7 @@ app.use(router);
 const PORT = process.env.PORT;
 //  start the webserver
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on :http://localhost:${PORT}`);
 });
 
 // export the webserver for use in the application
