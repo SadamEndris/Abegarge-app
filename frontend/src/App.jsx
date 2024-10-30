@@ -36,16 +36,15 @@ function App() {
         {/* authorized routes */}
         {/* <Route path="/admin/orders" element={<Orders />} /> */}
         <Route
-          path="/admin/orders"
+          path="/orders"
           element={
             <PrivateAuthRoute roles={[1, 2, 3]}>
               <Orders />
             </PrivateAuthRoute>
           }
         />
-        {/* checking directly onthe employees page for testing purpose  */}
+        {/* checking directly on the employees page for testing purpose  */}
         <Route path="/admin/employees" element={<Employees />} />
-
         <Route
           path="/admin/customers"
           element={
@@ -54,7 +53,7 @@ function App() {
             </PrivateAuthRoute>
           }
         />
-        {/* // <Route path="/admin/add-employee" element={<AddEmployee />} /> */}
+        {/* <Route path="/admin/add-employee" element={<AddEmployee />} /> */}
         <Route
           path="/admin/add-employee"
           element={

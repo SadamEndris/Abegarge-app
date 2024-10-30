@@ -1,5 +1,5 @@
 import React from "react";
-// Import the auth hook
+// Import the auth hook to access the logged in user's information and role
 import { useAuth } from "../../../Context/AuthContext";
 // Import the login form component
 import LoginForm from "../../components/LoginForm/LoginForm";

@@ -1,7 +1,9 @@
 // Import the employee service
-const employeeService = require('../services/employee.service');
+const employeeService = require("../services/employee.service");
 // Create the add employee controller
 async function createEmployee(req, res, next) {
+  // check the header
+  // console.log(req.headers);
   // check if the employee exists in the database
   const employeeExists = await employeeService.checkIfEmployeeExists(
     req.body.employee_email
@@ -9,7 +11,7 @@ async function createEmployee(req, res, next) {
   //   if employee exists, send a response to the client
   if (employeeExists) {
     return res.status(400).json({
-      error: 'This email address is already associated with another employee!',
+      error: "This email address is already associated with another employee!",
     });
   } else {
     try {
@@ -18,18 +20,18 @@ async function createEmployee(req, res, next) {
       const employee = await employeeService.createEmployee(employeeData);
       if (!employee) {
         return res.status(400).json({
-          error: 'Failed to add the employee!',
+          error: "Failed to add the employee!",
         });
       } else {
         return res.status(200).json({
-          status: 'Employee added successfully',
+          status: "Employee added successfully",
           // data: employee,
         });
       }
     } catch (error) {
       console.log(error);
       return res.status(400).json({
-        error: 'Something went wrong!',
+        error: "Something went wrong!",
       });
     }
   }

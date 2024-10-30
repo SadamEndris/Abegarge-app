@@ -1,10 +1,16 @@
 // Import express module
-const express = require('express');
+const express = require("express");
 // Import the router module
 const router = express.Router();
 // Import the employee controller
-const employeeController = require('../controllers/employee.controller');
+const employeeController = require("../controllers/employee.controller");
+// Import the middleWare
+const authMiddleware = require("../middlewares/auth.middleware");
 // Create a route to handle the add employee request on post
-router.post('/api/employee', employeeController.createEmployee);
+router.post(
+  "/api/employee",
+  [authMiddleware.verifyToken, authMiddleware.isAdmin],
+  employeeController.createEmployee
+);
 // Export the router
 module.exports = router;
