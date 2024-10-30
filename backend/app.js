@@ -1,11 +1,11 @@
 // Import the express module
-const express = require('express');
+const express = require("express");
 // Import the dotenv module and call the config() method
-require('dotenv').config();
+require("dotenv").config();
 // import the sanitize module
-const sanitize = require('sanitize');
+const sanitize = require("sanitize");
 // Import the CORS module
-const cors = require('cors');
+const cors = require("cors");
 // Set up the CORS options to allow requests from our front-end
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
@@ -14,13 +14,13 @@ const corsOptions = {
 // create the webserver
 const app = express();
 // Add the cors middleware
-app.use(cors(corsOptions));
+app.use(cors());
 // Add the express.json() middleware
 app.use(express.json());
 // Add the sanitizer to the express middleware
 app.use(sanitize.middleware);
 // import the routes
-const router = require('./routes');
+const router = require("./routes");
 // Add the routes to the application as middleware
 app.use(router);
 // create a variable to hold our port number
@@ -32,8 +32,6 @@ app.listen(PORT, () => {
 
 // export the webserver for use in the application
 module.exports = app;
-
-
 
 // used to generate hashed password
 // const bcrypt = require('bcrypt');
