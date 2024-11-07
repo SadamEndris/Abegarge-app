@@ -3,7 +3,7 @@ import { Table, Button } from "react-bootstrap";
 import { useAuth } from "../../../../Context/AuthContext";
 import { format } from "date-fns";
 import employeeService from "../../../../services/employee.service";
-
+import { FaEdit, FaTrash } from "react-icons/fa"; // FontAwesome edit and trash icons
 const EmployeesList = () => {
   // States to store employee data and error messages
   const [employees, setEmployees] = useState([]);
@@ -92,7 +92,21 @@ const EmployeesList = () => {
                     </td>
                     <td>{employee.company_role_name}</td>
                     <td>
-                      <div className="edit-delete-icons">edit | delete</div>
+                      <div className="edit-delete-icons text-center">
+                        {/* Edit Icon with onClick event */}
+                        <FaEdit
+                          style={{ cursor: "pointer", marginRight: "10px" }}
+                          title="Edit Employee"
+                        />
+                        {/* Delete Icon with onClick event */}
+                        <FaTrash
+                          onClick={() =>
+                            handleDeleteClick(employee.employee_id)
+                          }
+                          style={{ cursor: "pointer" }}
+                          title="Delete Employee"
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
