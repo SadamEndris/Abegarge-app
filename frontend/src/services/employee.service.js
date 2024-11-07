@@ -16,11 +16,36 @@ const createEmployee = async (formData, loggedInEmployeeToken) => {
 
     const response = await fetch(`${api_url}/api/employee`, requestOptions);
 
-    // if (!response.ok) {
-    //   throw new Error(`Fetch failed with status: ${response.status}`);
-    // }
+    if (!response.ok) {
+      throw new Error(`Fetch failed with status: ${response.status}`);
+    }
 
     // Return parsed JSON response for easier data handling
+    return response;
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    throw error;
+  }
+};
+
+// A function to send a get request to get all the employees
+const getEmployees = async (token) => {
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-access-token": token,
+      },
+    };
+
+    const response = await fetch(`${api_url}/api/employee`, requestOptions);
+
+    if (!response.ok) {
+      throw new Error(`Fetch failed with status: ${response.status}`);
+    }
+
+    // Return response
     return response;
   } catch (error) {
     console.error("Fetch failed:", error);
@@ -31,6 +56,7 @@ const createEmployee = async (formData, loggedInEmployeeToken) => {
 // Export all the functions
 const employeeService = {
   createEmployee,
+  getEmployees,
 };
 
 export default employeeService;
