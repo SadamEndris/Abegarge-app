@@ -1,5 +1,6 @@
 const customerService = require("../services/customer.service");
 
+// Function to create a new customer in the database
 const createCustomer = async (req, res) => {
   // Check if the customer already exists in the database
   const customerExists = await customerService.checkCustomerExistence(
@@ -41,4 +42,34 @@ const createCustomer = async (req, res) => {
   }
 };
 
-module.exports = { createCustomer };
+// Function to get all customers from the database
+
+const getAllCustomers = async (req, res) => {
+  try {
+    // Call service to retrieve all customers
+    const customers = await customerService.getAllCustomers();
+
+    if (customers) {
+      // If customers found, send the data in response
+      return res.status(200).json({
+        success: true,
+        message: "Customers fetched successfully",
+        data: customers,
+      });
+    } else {
+      // If no customers found
+      return res.status(404).json({
+        success: false,
+        message: "No customers found",
+      });
+    }
+  } catch (error) {
+    console.error("Error in controller:", error); // Log detailed error for debugging
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred while fetching customers.",
+    });
+  }
+};
+
+module.exports = { createCustomer, getAllCustomers };

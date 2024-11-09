@@ -69,7 +69,34 @@ async function createCustomer(customer) {
   }
 }
 
+// function to get all customers from the database
+
+// Function to fetch all customers limited to the latest 10 customers
+async function getAllCustomers() {
+  try {
+    const query = `
+      SELECT * 
+      FROM customer_identifier 
+      LEFT JOIN customer_info 
+      ON customer_identifier.customer_id = customer_info.customer_id 
+      ORDER BY customer_identifier.customer_id DESC 
+      LIMIT 10;
+    `;
+    const rows = await db.query(query); // Execute the query
+
+    if (rows.length === 0) {
+      return null; // Return null if no customers found
+    }
+
+    return rows; // Return the rows if customers are found
+  } catch (error) {
+    console.error("Error retrieving customers:", error);
+    throw new Error("Internal Server Error"); // Throw error to be caught by controller
+  }
+}
+
 module.exports = {
   createCustomer,
   checkCustomerExistence,
+  getAllCustomers,
 };
