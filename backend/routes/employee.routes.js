@@ -19,12 +19,19 @@ router.get(
   employeeController.getAllEmployees
 );
 
-// Create a route to handle updating an employee by ID
-router.put(
-  "/api/employee/:id",
-  [authMiddleware.verifyToken, authMiddleware.isAdmin], // You can adjust middleware as needed
-  employeeController.updateEmployee
-);
+// params are variables in the URL example
+// router.get("/api/employees/:id", (req, res) => {
+//   const employeeId = req.params.id; // Access the 'id' parameter
+//   res.send(`Employee ID: ${employeeId}`);
+// });
+
+router.get("/api/employees/:id", employeeController.getEmployeeById);
+
+// Route for updating employee details
+router.put("/api/employee/:employee_id", employeeController.updateEmployee);
+
+// DELETE request to delete employee
+router.delete("/api/employee/:id", employeeController.deleteEmployee);
 
 // Export the router
 module.exports = router;

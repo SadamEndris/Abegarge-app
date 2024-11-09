@@ -1,5 +1,5 @@
 //  import the mysql2 module promise wrapper
-const mysql = require('mysql2/promise');
+const mysql = require("mysql2/promise");
 // define the connection parameters for the database
 const dbConfig = {
   connectionLimit: 10,
@@ -17,6 +17,7 @@ async function query(sql, params) {
   const [rows, fields] = await pool.execute(sql, params);
   return rows;
 }
+
 // export the query function for use in the application
 module.exports = {
   query,
