@@ -40,8 +40,22 @@ const getAllServices = async () => {
     throw new Error("Internal Server Error");
   }
 };
+
+const getServiceById = async (serviceId) => {
+  try {
+    const query = `SELECT service_id, service_name, service_description FROM common_services WHERE service_id = ?;`;
+    const [service] = await db.query(query, [serviceId]); // Destructure to get single service
+
+    return service || null; // Return service if found, otherwise null
+  } catch (error) {
+    console.error("Error retrieving service by ID:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
 // Export the service functions
 module.exports = {
   addService,
   getAllServices,
+  getServiceById,
 };

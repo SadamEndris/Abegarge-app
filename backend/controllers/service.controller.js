@@ -52,8 +52,43 @@ const getAllServices = async (req, res) => {
   }
 };
 
+const getServiceById = async (req, res) => {
+  const serviceId = parseInt(req.params.id, 10);
+
+  // Validate service ID
+  if (isNaN(serviceId)) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "Invalid service ID",
+    });
+  }
+
+  try {
+    // Fetch service by ID
+    const service = await serviceService.getServiceById(serviceId);
+
+    if (!service) {
+      // If service is not found
+      return res.status(404).json({
+        error: "Not Found",
+        message: "Service not found",
+      });
+    }
+
+    // If service is found
+    return res.status(200).json(service);
+  } catch (error) {
+    console.error("Error in controller:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred.",
+    });
+  }
+};
+
 // Export the controller
 module.exports = {
   addService,
   getAllServices,
+  getServiceById,
 };
