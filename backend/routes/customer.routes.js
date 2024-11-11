@@ -13,5 +13,9 @@ router.get("/api/all-customers", customerController.getAllCustomers);
 
 // Define the route for fetching a single customer by ID
 router.get("/api/customers/:id", customerController.getSingleCustomer);
+
+// Define the route for updating a customer by ID
+router.put("/api/update-customer/:id", customerController.updateCustomer);
+
 // export router
 module.exports = router;

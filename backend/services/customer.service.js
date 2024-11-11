@@ -119,9 +119,67 @@ async function getSingleCustomer(customerId) {
   }
 }
 
+// Function to update a customer by ID with optional fields
+async function updateCustomer(customerId, requestData) {
+  const {
+    customer_first_name,
+    customer_last_name,
+    customer_phone_number,
+    active_customer_status,
+  } = requestData;
+
+  try {
+    // Check if the customer exists
+    const checkQuery = `SELECT customer_id FROM customer_identifier WHERE customer_id = ?`;
+    const checkResult = await db.query(checkQuery, [customerId]);
+
+    if (checkResult.length === 0) {
+      return null; // Customer not found
+    }
+
+    // Build the update query dynamically based on provided fields
+    const updateFields = [];
+    const updateValues = [];
+
+    if (customer_first_name) {
+      updateFields.push("customer_first_name = ?");
+      updateValues.push(customer_first_name);
+    }
+    if (customer_last_name) {
+      updateFields.push("customer_last_name = ?");
+      updateValues.push(customer_last_name);
+    }
+    if (customer_phone_number) {
+      updateFields.push("customer_phone_number = ?");
+      updateValues.push(customer_phone_number);
+    }
+    if (active_customer_status != null) {
+      updateFields.push("active_customer_status = ?");
+      updateValues.push(active_customer_status);
+    }
+
+    updateValues.push(customerId); // Add customerId for WHERE clause
+
+    const updateQuery = `
+      UPDATE customer_identifier
+      LEFT JOIN customer_info ON customer_identifier.customer_id = customer_info.customer_id
+      SET ${updateFields.join(", ")}
+      WHERE customer_identifier.customer_id = ?;
+    `;
+
+    // Execute the update query
+    const updateResult = await db.query(updateQuery, updateValues);
+    return updateResult.affectedRows > 0;
+  } catch (error) {
+    console.error("Error updating customer:", error);
+    throw new Error("Internal Server Error");
+  }
+}
+
 module.exports = {
   createCustomer,
   checkCustomerExistence,
   getAllCustomers,
   getSingleCustomer,
+  updateCustomer,
 };

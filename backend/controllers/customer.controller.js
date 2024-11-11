@@ -111,4 +111,65 @@ const getSingleCustomer = async (req, res) => {
   }
 };
 
-module.exports = { createCustomer, getAllCustomers, getSingleCustomer };
+// Function to update a customer by ID
+const updateCustomer = async (req, res) => {
+  const customerId = parseInt(req.params.id, 10);
+
+  // Validate customer_id parameter
+  if (isNaN(customerId)) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "The customer ID provided is invalid or missing",
+    });
+  }
+
+  // Keep request body in a variable to avoid destructuring
+  const requestData = req.body;
+
+  // Check if at least one field is provided for update
+  if (
+    !requestData.customer_first_name &&
+    !requestData.customer_last_name &&
+    !requestData.customer_phone_number &&
+    requestData.active_customer_status == null
+  ) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "No fields provided for update",
+    });
+  }
+
+  try {
+    // Call service to update the customer
+    const updateResult = await customerService.updateCustomer(
+      customerId,
+      requestData
+    );
+
+    if (updateResult) {
+      return res.status(200).json({
+        success: true,
+        message: "Customer updated successfully",
+      });
+    } else {
+      // Customer ID not found
+      return res.status(404).json({
+        error: "Customer not found",
+        message: "The customer ID provided does not exist.",
+      });
+    }
+  } catch (error) {
+    console.error("Error in controller:", error); // Log error for debugging
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred while updating the customer.",
+    });
+  }
+};
+
+module.exports = {
+  createCustomer,
+  getAllCustomers,
+  getSingleCustomer,
+  updateCustomer,
+};
