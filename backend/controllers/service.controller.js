@@ -37,7 +37,23 @@ const addService = async (req, res) => {
   }
 };
 
+const getAllServices = async (req, res) => {
+  try {
+    const services = await serviceService.getAllServices();
+    return res.status(200).json({
+      services: services,
+    });
+  } catch (error) {
+    console.error("Error fetching services:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred.",
+    });
+  }
+};
+
 // Export the controller
 module.exports = {
   addService,
+  getAllServices,
 };

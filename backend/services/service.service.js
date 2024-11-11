@@ -30,7 +30,18 @@ async function addService(requestData) {
   }
 }
 
+const getAllServices = async () => {
+  try {
+    const query = `SELECT service_id, service_name, service_description FROM common_services;`;
+    const services = await db.query(query);
+    return services;
+  } catch (error) {
+    console.error("Error retrieving services:", error);
+    throw new Error("Internal Server Error");
+  }
+};
 // Export the service functions
 module.exports = {
   addService,
+  getAllServices,
 };
