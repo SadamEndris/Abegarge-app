@@ -11,5 +11,7 @@ router.post("/api/add-customer", customerController.createCustomer);
 // get request for getting all customers from the database
 router.get("/api/all-customers", customerController.getAllCustomers);
 
+// Define the route for fetching a single customer by ID
+router.get("/api/customers/:id", customerController.getSingleCustomer);
 // export router
 module.exports = router;

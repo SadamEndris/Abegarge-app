@@ -95,8 +95,33 @@ async function getAllCustomers() {
   }
 }
 
+// Function to fetch a single customer by ID
+async function getSingleCustomer(customerId) {
+  try {
+    const query = `
+      SELECT *
+      FROM customer_identifier
+      LEFT JOIN customer_info 
+      ON customer_identifier.customer_id = customer_info.customer_id 
+      WHERE customer_identifier.customer_id = ?;
+    `;
+    const rows = await db.query(query, [customerId]);
+
+    // Check if any data is retrieved
+    if (rows.length === 0) {
+      return null; // Customer not found
+    }
+
+    return rows[0]; // Return the single customer data
+  } catch (error) {
+    console.error("Error retrieving customer:", error);
+    throw new Error("Internal Server Error"); // Pass the error to the controller
+  }
+}
+
 module.exports = {
   createCustomer,
   checkCustomerExistence,
   getAllCustomers,
+  getSingleCustomer,
 };

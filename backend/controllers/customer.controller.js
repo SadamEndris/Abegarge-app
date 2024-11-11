@@ -72,4 +72,43 @@ const getAllCustomers = async (req, res) => {
   }
 };
 
-module.exports = { createCustomer, getAllCustomers };
+// Function to get a single customer by ID
+const getSingleCustomer = async (req, res) => {
+  const customerId = parseInt(req.params.id, 10);
+
+  // Validate the customer ID
+  if (isNaN(customerId)) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "The customer ID provided is invalid or missing",
+    });
+  }
+
+  try {
+    // Call service to retrieve the single customer by ID
+    const customer = await customerService.getSingleCustomer(customerId);
+
+    if (customer) {
+      // Send success response with customer data
+      return res.status(200).json({
+        success: true,
+        message: "Customer fetched successfully",
+        data: customer,
+      });
+    } else {
+      // Send error response if customer not found
+      return res.status(404).json({
+        error: "Customer not found",
+        message: "The customer ID provided does not exist.",
+      });
+    }
+  } catch (error) {
+    console.error("Error in controller:", error); // Log error for debugging
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred while fetching the customer.",
+    });
+  }
+};
+
+module.exports = { createCustomer, getAllCustomers, getSingleCustomer };
