@@ -21,5 +21,8 @@ router.use(loginRoutes);
 const customerRoutes = require("./customer.routes");
 router.use(customerRoutes);
 
+// Import the service routes and add them to the main router
+const serviceRoutes = require("./service.routes");
+router.use(serviceRoutes);
 // Export the router for use in the application
 module.exports = router;
