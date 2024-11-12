@@ -14,5 +14,7 @@ router.get("/api/services", serviceController.getAllServices);
 // Define the route to get a service by ID
 router.get("/api/service/:id", serviceController.getServiceById);
 
+// Define the route to update a service by ID
+router.put("/api/service/:id", serviceController.updateService);
 // Export the router
 module.exports = router;

@@ -53,9 +53,36 @@ const getServiceById = async (serviceId) => {
   }
 };
 
+const updateService = async (serviceId, updateData) => {
+  const { service_name, service_description } = updateData;
+
+  try {
+    // Check if the service exists
+    const checkQuery = `SELECT service_id FROM common_services WHERE service_id = ?`;
+    const existingService = await db.query(checkQuery, [serviceId]);
+
+    if (existingService.length === 0) {
+      return "NOT_FOUND"; // Service with the specified ID not found
+    }
+
+    // Update the service with new data
+    const updateQuery = `
+      UPDATE common_services 
+      SET service_name = ?, service_description = ?
+      WHERE service_id = ?;
+    `;
+    await db.query(updateQuery, [service_name, service_description, serviceId]);
+    return true;
+  } catch (error) {
+    console.error("Error updating service:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
 // Export the service functions
 module.exports = {
   addService,
   getAllServices,
   getServiceById,
+  updateService,
 };
