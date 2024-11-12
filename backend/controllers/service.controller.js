@@ -131,10 +131,45 @@ const updateService = async (req, res) => {
   }
 };
 
+const deleteService = async (req, res) => {
+  const serviceId = parseInt(req.params.id, 10);
+
+  // Validate service ID
+  if (isNaN(serviceId)) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "Invalid service ID",
+    });
+  }
+
+  try {
+    // Call service to delete the service
+    const deleteResult = await serviceService.deleteService(serviceId);
+
+    if (deleteResult === "NOT_FOUND") {
+      return res.status(404).json({
+        error: "Not Found",
+        message: "Service not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Service deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error in controller:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred.",
+    });
+  }
+};
+
 // Export the controller
 module.exports = {
   addService,
   getAllServices,
   getServiceById,
   updateService,
+  deleteService,
 };

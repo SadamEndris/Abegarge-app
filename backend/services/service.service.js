@@ -79,10 +79,31 @@ const updateService = async (serviceId, updateData) => {
   }
 };
 
+const deleteService = async (serviceId) => {
+  try {
+    // Check if the service exists
+    const checkQuery = `SELECT service_id FROM common_services WHERE service_id = ?`;
+    const existingService = await db.query(checkQuery, [serviceId]);
+
+    if (existingService.length === 0) {
+      return "NOT_FOUND"; // Service with the specified ID not found
+    }
+
+    // Delete the service
+    const deleteQuery = `DELETE FROM common_services WHERE service_id = ?`;
+    await db.query(deleteQuery, [serviceId]);
+    return true;
+  } catch (error) {
+    console.error("Error deleting service:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
 // Export the service functions
 module.exports = {
   addService,
   getAllServices,
   getServiceById,
   updateService,
+  deleteService,
 };

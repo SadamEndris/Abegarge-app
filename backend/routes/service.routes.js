@@ -16,5 +16,9 @@ router.get("/api/service/:id", serviceController.getServiceById);
 
 // Define the route to update a service by ID
 router.put("/api/service/:id", serviceController.updateService);
+
+// Define the route to delete a service by ID
+router.delete("/api/service/:id", serviceController.deleteService);
+
 // Export the router
 module.exports = router;
