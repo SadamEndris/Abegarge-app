@@ -144,6 +144,30 @@ const updateVehicle = async (vehicleData) => {
     throw new Error("Internal Server Error");
   }
 };
+
+// Function to check if a vehicle belongs to a specific customer
+const checkVehicleBelongsToCustomer = async (vehicle_id, customer_id) => {
+  try {
+    const query = `SELECT vehicle_id FROM customer_vehicle_info WHERE vehicle_id = ? AND customer_id = ?`;
+    const [vehicle] = await db.query(query, [vehicle_id, customer_id]);
+    return !!vehicle; // Return true if vehicle exists for the specified customer, otherwise false
+  } catch (error) {
+    console.error("Error checking vehicle ownership:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
+// Function to delete a vehicle by vehicle_id
+const deleteVehicle = async (vehicle_id) => {
+  try {
+    const query = `DELETE FROM customer_vehicle_info WHERE vehicle_id = ?`;
+    await db.query(query, [vehicle_id]);
+  } catch (error) {
+    console.error("Error deleting vehicle:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
 module.exports = {
   checkCustomerExists,
   addVehicle,
@@ -151,4 +175,6 @@ module.exports = {
   getVehicleById,
   checkVehicleExists,
   updateVehicle,
+  checkVehicleBelongsToCustomer,
+  deleteVehicle,
 };

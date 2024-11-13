@@ -167,9 +167,51 @@ const updateVehicle = async (req, res) => {
   }
 };
 
+const deleteVehicle = async (req, res) => {
+  const customer_id = parseInt(req.params.customer_id, 10);
+  const vehicle_id = parseInt(req.params.vehicle_id, 10);
+
+  // Validate parameters
+  if (isNaN(customer_id) || isNaN(vehicle_id)) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "Invalid customer ID or vehicle ID",
+    });
+  }
+
+  try {
+    // Check if the vehicle exists and belongs to the specified customer
+    const vehicleExists = await vehicleService.checkVehicleBelongsToCustomer(
+      vehicle_id,
+      customer_id
+    );
+    if (!vehicleExists) {
+      return res.status(404).json({
+        error: "Not Found",
+        message: "Vehicle not found for the specified customer",
+      });
+    }
+
+    // Delete the vehicle
+    await vehicleService.deleteVehicle(vehicle_id);
+
+    return res.status(200).json({
+      message: "Vehicle deleted successfully",
+      success: "true",
+    });
+  } catch (error) {
+    console.error("Error in controller:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred.",
+    });
+  }
+};
+
 module.exports = {
   addVehicle,
   getAllCustomerVehicles,
   getVehicleById,
   updateVehicle,
+  deleteVehicle,
 };
