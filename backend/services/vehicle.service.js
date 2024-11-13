@@ -74,8 +74,26 @@ const getVehiclesByCustomerId = async (customer_id) => {
   }
 };
 
+// Function to retrieve a specific vehicle by customer_id and vehicle_id
+const getVehicleById = async (customer_id, vehicle_id) => {
+  try {
+    const query = `
+      SELECT vehicle_id, customer_id, vehicle_year, vehicle_make, vehicle_model,
+             vehicle_type, vehicle_mileage, vehicle_tag, vehicle_serial, vehicle_color
+      FROM customer_vehicle_info
+      WHERE customer_id = ? AND vehicle_id = ?;
+    `;
+    const [vehicle] = await db.query(query, [customer_id, vehicle_id]);
+    return vehicle || null; // Return vehicle if found, otherwise null
+  } catch (error) {
+    console.error("Error retrieving vehicle:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
 module.exports = {
   checkCustomerExists,
   addVehicle,
   getVehiclesByCustomerId,
+  getVehicleById,
 };

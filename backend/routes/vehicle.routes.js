@@ -15,5 +15,11 @@ router.get(
   vehicleController.getAllCustomerVehicles
 );
 
+// Define the route to get a specific vehicle by customer_id and vehicle_id
+router.get(
+  "/api/vehicles/:customer_id/:vehicle_id",
+  vehicleController.getVehicleById
+); 
+
 // export the router
 module.exports = router;
