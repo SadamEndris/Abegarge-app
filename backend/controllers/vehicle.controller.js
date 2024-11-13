@@ -116,8 +116,60 @@ const getVehicleById = async (req, res) => {
   }
 };
 
+const updateVehicle = async (req, res) => {
+  const vehicleData = req.body;
+
+  // Validate required fields
+  if (
+    !vehicleData.vehicle_id ||
+    !vehicleData.customer_id ||
+    !vehicleData.vehicle_model ||
+    !vehicleData.vehicle_year ||
+    !vehicleData.vehicle_make ||
+    !vehicleData.vehicle_type ||
+    !vehicleData.vehicle_mileage ||
+    !vehicleData.vehicle_serial ||
+    !vehicleData.vehicle_tag ||
+    !vehicleData.vehicle_color
+  ) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "Please provide all required fields",
+    });
+  }
+
+  try {
+    // Verify that the vehicle exists
+    const vehicleExists = await vehicleService.checkVehicleExists(
+      vehicleData.vehicle_id,
+      vehicleData.customer_id
+    );
+    if (!vehicleExists) {
+      return res.status(404).json({
+        error: "Not Found",
+        message: "Vehicle not found",
+      });
+    }
+
+    // Update the vehicle
+    await vehicleService.updateVehicle(vehicleData);
+
+    return res.status(200).json({
+      message: "Vehicle updated successfully",
+      success: "true",
+    });
+  } catch (error) {
+    console.error("Error in controller:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred.",
+    });
+  }
+};
+
 module.exports = {
   addVehicle,
   getAllCustomerVehicles,
   getVehicleById,
+  updateVehicle,
 };

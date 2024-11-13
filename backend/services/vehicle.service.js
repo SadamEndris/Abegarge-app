@@ -91,9 +91,64 @@ const getVehicleById = async (customer_id, vehicle_id) => {
   }
 };
 
+// Function to check if a vehicle exists for a specific customer_id and vehicle_id
+const checkVehicleExists = async (vehicle_id, customer_id) => {
+  try {
+    const query = `SELECT vehicle_id FROM customer_vehicle_info WHERE vehicle_id = ? AND customer_id = ?`;
+    const [vehicle] = await db.query(query, [vehicle_id, customer_id]);
+    return !!vehicle; // Return true if vehicle exists, otherwise false
+  } catch (error) {
+    console.error("Error checking vehicle:", error);
+    throw new Error("Internal Server Error");
+  }
+};
+
+// Function to update an existing vehicle
+const updateVehicle = async (vehicleData) => {
+  const {
+    vehicle_id,
+    customer_id,
+    vehicle_model,
+    vehicle_year,
+    vehicle_make,
+    vehicle_type,
+    vehicle_mileage,
+    vehicle_serial,
+    vehicle_tag,
+    vehicle_color,
+  } = vehicleData;
+
+  try {
+    const query = `
+      UPDATE customer_vehicle_info
+      SET vehicle_model = ?, vehicle_year = ?, vehicle_make = ?, 
+          vehicle_type = ?, vehicle_mileage = ?, vehicle_serial = ?, 
+          vehicle_tag = ?, vehicle_color = ?
+      WHERE vehicle_id = ? AND customer_id = ?;
+    `;
+
+    await db.query(query, [
+      vehicle_model,
+      vehicle_year,
+      vehicle_make,
+      vehicle_type,
+      vehicle_mileage,
+      vehicle_serial,
+      vehicle_tag,
+      vehicle_color,
+      vehicle_id,
+      customer_id,
+    ]);
+  } catch (error) {
+    console.error("Error updating vehicle:", error);
+    throw new Error("Internal Server Error");
+  }
+};
 module.exports = {
   checkCustomerExists,
   addVehicle,
   getVehiclesByCustomerId,
   getVehicleById,
+  checkVehicleExists,
+  updateVehicle,
 };

@@ -19,7 +19,10 @@ router.get(
 router.get(
   "/api/vehicles/:customer_id/:vehicle_id",
   vehicleController.getVehicleById
-); 
+);
+
+// Define the route to update a vehicle's details
+router.put("/api/vehicle", vehicleController.updateVehicle);
 
 // export the router
 module.exports = router;
