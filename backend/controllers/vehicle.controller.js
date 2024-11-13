@@ -34,18 +34,7 @@ const addVehicle = async (req, res) => {
       });
     }
 
-    // Check if the customer already has a vehicle
-    const customerHasVehicle = await vehicleService.checkCustomerHasVehicle(
-      vehicleData.customer_id
-    );
-    if (customerHasVehicle) {
-      return res.status(400).json({
-        error: "Bad Request",
-        message: "Customer already has an existing vehicle",
-      });
-    }
-
-    // Add the new vehicle
+    // Add the new vehicle (without checking for an existing vehicle by this customer)
     await vehicleService.addVehicle(vehicleData);
 
     return res.status(201).json({
