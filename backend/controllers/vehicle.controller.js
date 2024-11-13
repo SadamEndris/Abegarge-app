@@ -1,6 +1,7 @@
 // vehicle.controller.js
 const vehicleService = require("../services/vehicle.service");
 
+// Function to add a new vehicle for a customer
 const addVehicle = async (req, res) => {
   const vehicleData = req.body;
 
@@ -50,6 +51,35 @@ const addVehicle = async (req, res) => {
   }
 };
 
+// Function to get all vehicles for a specific customer by customer_id
+const getAllCustomerVehicles = async (req, res) => {
+  const customer_id = parseInt(req.params.customer_id, 10);
+
+  if (isNaN(customer_id)) {
+    return res.status(400).json({
+      error: "Bad Request",
+      message: "Invalid customer ID",
+    });
+  }
+
+  try {
+    // Call the service to get all vehicles for the customer
+    const vehicles = await vehicleService.getVehiclesByCustomerId(customer_id);
+
+    return res.status(200).json({
+      customer_id: customer_id,
+      vehicles: vehicles,
+    });
+  } catch (error) {
+    console.error("Error in controller:", error);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred.",
+    });
+  }
+};
+
 module.exports = {
   addVehicle,
+  getAllCustomerVehicles,
 };
