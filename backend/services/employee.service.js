@@ -123,6 +123,7 @@ const getEmployeeById = async (employeeId) => {
     // Return the first result (as employee_id should be unique)
     return rows[0];
   } catch (error) {
+  
     // Log the error and throw it to be handled by the controller
     console.error("Error in getEmployeeById service:", error);
     throw error;

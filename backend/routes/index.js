@@ -29,5 +29,9 @@ router.use(serviceRoutes);
 const vehicleRoutes = require("./vehicle.routes");
 router.use(vehicleRoutes);
 
+// import the order routes and add them to the main router
+const orderRoutes = require("./order.routes");
+router.use(orderRoutes);
+
 // Export the router for use in the application
 module.exports = router;

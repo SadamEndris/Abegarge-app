@@ -1,0 +1,96 @@
+const conn = require("../config/db.config");
+const { v4: uuidv4 } = require("uuid");
+
+/**
+ * Service to create a new order
+ * @param {Object} body - Request body containing order details
+ * @returns {number} - The ID of the newly created order
+ * @throws {Error} - Throws an error if any operation fails
+ */
+const createOrder = async (body) => {
+  try {
+    // Step 1: Validate employee_id, customer_id, and vehicle_id
+    const validateQuery = `
+      SELECT EXISTS(
+        SELECT 1 FROM employee WHERE employee_id = ?
+      ) AS valid_employee,
+      EXISTS(
+        SELECT 1 FROM customer_identifier WHERE customer_id = ?
+      ) AS valid_customer,
+      EXISTS(
+        SELECT 1 FROM customer_vehicle_info WHERE vehicle_id = ?
+      ) AS valid_vehicle;
+    `;
+    const [validationResult] = await conn.query(validateQuery, [
+      body.employee_id,
+      body.customer_id,
+      body.vehicle_id,
+    ]);
+
+    if (
+      !validationResult.valid_employee ||
+      !validationResult.valid_customer ||
+      !validationResult.valid_vehicle
+    ) {
+      throw new Error("Invalid employee_id, customer_id, or vehicle_id.");
+    }
+
+    // Step 2: Insert into orders table
+    const orderHash = uuidv4();
+    const orderQuery = `
+      INSERT INTO orders (employee_id, customer_id, vehicle_id, order_date, active_order, order_hash)
+      VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?);
+    `;
+    const orderResult = await conn.query(orderQuery, [
+      body.employee_id,
+      body.customer_id,
+      body.vehicle_id,
+      body.order_completed ? 1 : 0,
+      orderHash,
+    ]);
+
+    const order_id = orderResult.insertId;
+
+    // Step 3: Insert into order_info table
+    const orderInfoQuery = `
+      INSERT INTO order_info (order_id, estimated_completion_date, completion_date, additional_request, notes_for_internal_use, additional_requests_completed)
+      VALUES (?, ?, ?, ?, ?, ?);
+    `;
+    await conn.query(orderInfoQuery, [
+      order_id,
+      body.estimated_completion_date,
+      body.completion_date || null,
+      body.order_description,
+      null,
+      0,
+    ]);
+
+    // Step 4: Insert into order_services table
+    let orderServicesQuery = `
+      INSERT INTO order_services (order_id, service_id, service_completed) VALUES
+    `;
+    const orderServicesValues = body.order_services
+      .map((service) => `(${order_id}, ${service.service_id}, 0)`)
+      .join(", ");
+
+    orderServicesQuery += orderServicesValues;
+    await conn.query(orderServicesQuery);
+
+    // Step 5: Insert initial order status
+    const orderStatusQuery = `
+      INSERT INTO order_status (order_id, order_status)
+      VALUES (?, 0); -- 0 = Pending
+    `;
+    await conn.query(orderStatusQuery, [order_id]);
+
+    // Return the created order_id
+    return order_id;
+  } catch (err) {
+    console.error("Error in createOrder service:", err.message);
+    throw err;
+  }
+};
+
+module.exports = {
+  createOrder,
+};
