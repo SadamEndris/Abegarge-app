@@ -91,6 +91,51 @@ const createOrder = async (body) => {
   }
 };
 
+/**
+ * Service to retrieve all orders from the database
+ * @returns {Array<Object>} - List of orders with their details
+ * @throws {Error} - Throws an error if any operation fails
+ */
+const getAllOrders = async () => {
+  try {
+    // Query to fetch all orders and their details with descriptive aliases
+    const query = `
+                SELECT 
+  orders.order_id,
+  orders.employee_id,
+  orders.customer_id,
+  orders.vehicle_id,
+  order_info.additional_request AS order_description,
+  orders.order_date,
+  order_info.estimated_completion_date,
+  order_info.completion_date,
+  order_info.additional_requests_completed AS order_completed,
+  JSON_ARRAYAGG(
+    JSON_OBJECT(
+      'order_service_id', order_services.order_service_id,
+      'order_id', order_services.order_id,
+      'service_id', order_services.service_id
+    )
+  ) AS order_services
+FROM orders
+JOIN order_info ON orders.order_id = order_info.order_id
+LEFT JOIN order_services ON orders.order_id = order_services.order_id
+GROUP BY orders.order_id
+ORDER BY orders.order_date DESC;
+
+    `;
+
+    // Execute the query
+    const rows = await conn.query(query);
+
+    return rows;
+  } catch (err) {
+    console.error("Error in getAllOrders service:", err.message);
+    throw err;
+  }
+};
+
 module.exports = {
   createOrder,
+  getAllOrders,
 };

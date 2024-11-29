@@ -61,6 +61,32 @@ const createOrder = async (req, res) => {
   }
 };
 
+/**
+ * Controller to handle retrieving all orders
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const getAllOrders = async (req, res) => {
+  try {
+    // Call the service function to fetch all orders
+    const orders = await orderService.getAllOrders();
+
+    // Return the retrieved orders
+    return res.status(200).json({
+      message: "Orders retrieved successfully.",
+      success: true,
+      data: orders,
+    });
+  } catch (error) {
+    console.error("Error in getAllOrders controller:", error.message);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred while retrieving orders.",
+    });
+  }
+};
+// Export the controller functions
 module.exports = {
   createOrder,
+  getAllOrders,
 };
