@@ -135,7 +135,70 @@ ORDER BY orders.order_date DESC;
   }
 };
 
+/**
+ * Service to retrieve a single order by ID from the database
+ * @param {number} orderId - ID of the order to retrieve
+ * @returns {Object|null} - Order details or null if not found
+ * @throws {Error} - Throws an error if database operation fails
+ */
+const getOrderById = async (orderId) => {
+  try {
+    // Query to fetch a specific order by ID with related data
+    const query = `
+      SELECT 
+        orders.order_id,
+        orders.employee_id,
+        orders.customer_id,
+        orders.vehicle_id,
+        customer_info.customer_first_name,
+        customer_info.customer_last_name,
+        customer_vehicle_info.vehicle_make,
+        customer_vehicle_info.vehicle_model,
+        customer_vehicle_info.vehicle_year,
+        order_info.additional_request AS order_description,
+        orders.order_date,
+        order_info.estimated_completion_date,
+        order_info.completion_date,
+        order_info.additional_requests_completed AS order_completed,
+        JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'order_service_id', order_services.order_service_id,
+            'order_id', order_services.order_id,
+            'service_id', order_services.service_id,
+            'service_completed', order_services.service_completed
+          )
+        ) AS order_services
+      FROM orders
+      JOIN order_info ON orders.order_id = order_info.order_id
+      LEFT JOIN order_services ON orders.order_id = order_services.order_id
+      JOIN customer_info ON orders.customer_id = customer_info.customer_id
+      JOIN customer_vehicle_info ON orders.vehicle_id = customer_vehicle_info.vehicle_id
+      WHERE orders.order_id = ?
+      GROUP BY orders.order_id;
+    `;
+
+    // Execute the query with the provided orderId
+    const [rows, fields] = await conn.query(query, [orderId]);
+
+    // if no rows are returned, the order does not exist in the database
+    if (rows.length === 0) {
+      return null;
+    }
+
+    // access the row of the result
+    const order = rows;
+    // console.log("order details", order);
+
+    // If order exists, return the order details
+    return order;
+  } catch (err) {
+    console.error("Error in getOrderById service:", err.message);
+    throw new Error("Failed to retrieve order from the database.");
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
+  getOrderById,
 };
