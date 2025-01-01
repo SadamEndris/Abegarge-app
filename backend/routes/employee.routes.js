@@ -1,37 +1,70 @@
-// Import express module
 const express = require("express");
 // Import the router module
 const router = express.Router();
 // Import the employee controller
 const employeeController = require("../controllers/employee.controller");
-// Import the middleWare
-const authMiddleware = require("../middlewares/auth.middleware");
-// Create a route to handle the add employee request on post
+// Import the authentication middleware
+const { verifyToken, isAdmin } = require("../middlewares/auth.middleware");
+
+/**
+ * @route POST /api/employee
+ * @description Add a new employee. Requires admin privileges.
+ * @access Private - admin only
+ */
 router.post(
   "/api/employee",
-  [authMiddleware.verifyToken, authMiddleware.isAdmin],
-  employeeController.createEmployee
+  verifyToken,
+  isAdmin,
+  employeeController.addEmployee
 );
-// Create a route to handle the get all employees on get
+
+/**
+ * @route GET /api/employee
+ * @description Get all employees. Requires admin privileges.
+ * @access Private - admin only
+ */
 router.get(
-  "/api/employee",
-  [authMiddleware.verifyToken, authMiddleware.isAdmin],
+  "/api/employees",
+  verifyToken,
+  isAdmin,
   employeeController.getAllEmployees
 );
 
-// params are variables in the URL example
-// router.get("/api/employees/:id", (req, res) => {
-//   const employeeId = req.params.id; // Access the 'id' parameter
-//   res.send(`Employee ID: ${employeeId}`);
-// });
+/**
+ * @route GET /api/employees/:id
+ * @description Retrieve employee details by ID
+ * @access Admin-only
+ */
+router.get(
+  "/api/employee/:id",
+  verifyToken,
+  isAdmin,
+  employeeController.getEmployeeById
+);
 
-router.get("/api/employees/:id", employeeController.getEmployeeById);
+/**
+ * @route PUT /api/employee/:employee_id
+ * @description Update employee details by ID
+ * @access Admin-only
+ */
+router.put(
+  "/api/employee/:id",
+  verifyToken,
+  isAdmin,
+  employeeController.updateEmployee
+);
 
-// Route for updating employee details
-router.put("/api/employee/:employee_id", employeeController.updateEmployee);
-
-// DELETE request to delete employee
-router.delete("/api/employee/:id", employeeController.deleteEmployee);
+/**
+ * @route DELETE /api/employee/:id
+ * @description Delete employee by ID
+ * @access Admin-only
+ */
+router.delete(
+  "/api/employee/:id",
+  verifyToken,
+  isAdmin,
+  employeeController.deleteEmployee
+);
 
 // Export the router
 module.exports = router;
