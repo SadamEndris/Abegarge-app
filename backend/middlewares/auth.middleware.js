@@ -30,7 +30,7 @@ const verifyToken = async (req, res, next) => {
       });
     }
     // Verify the token using the JWT secret key
-    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     console.log("Decoded token: ", decoded);
     req.employee_email = decoded.employee_email;
     next(); // Proceed to the next middleware or route handler
