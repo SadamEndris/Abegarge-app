@@ -1,45 +1,53 @@
 // Import the query function from the db.config.js file
-const db = require('../config/db.config');
-// Import the bcrypt module to do the password comparison
-const bcrypt = require('bcrypt');
+const db = require("../config/db.config");
+// Import the bcrypt module to handle password comparison
+const bcrypt = require("bcrypt");
 // Import the employee service to get employee by email
-const employeeService = require('./employee.service');
-// Handle employee login
+const employeeService = require("./employee.service");
+
+/**
+ * Handles employee login by validating email and password.
+ *
+ * @param {object} employeeData - The login credentials provided by the employee.
+ * @returns {Promise<object>} - A result object containing status and relevant data or message.
+ */
 async function logIn(employeeData) {
   try {
-    let returnData = {}; // Object to be returned
+    // Check if employee exists
     const employee = await employeeService.getEmployeeByEmail(
       employeeData.employee_email
     );
+
     if (employee.length === 0) {
-      returnData = {
-        status: 'fail',
-        message: 'Employee does not exist',
+      return {
+        status: "fail",
+        message: "Employee does not exist",
       };
-      return returnData;
     }
-    // Compare the password
+
+    // Compare the provided password with the stored hashed password
     const passwordMatch = await bcrypt.compare(
       employeeData.employee_password,
       employee[0].employee_password_hashed
     );
+
     if (!passwordMatch) {
-      returnData = {
-        status: 'fail',
-        message: 'Incorrect password',
+      return {
+        status: "fail",
+        message: "Incorrect password",
       };
-      return returnData;
     }
-    returnData = {
-      status: 'success',
+
+    // Return success if credentials are valid
+    return {
+      status: "success",
       data: employee[0],
     };
-    return returnData;
   } catch (error) {
-    console.error('Error in login service:', error);
+    console.error("Error in login service:", error);
     return {
-      status: 'fail',
-      message: 'An error occurred during the login process.',
+      status: "fail",
+      message: "An error occurred during the login process.",
     };
   }
 }
