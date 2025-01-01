@@ -3,18 +3,32 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const employeeService = require("../services/employee.service");
 
-// Middleware to verify the token received from the frontend
+/**
+ * Middleware to verify the JWT token and check if the employee exists and is active.
+ *
+ * @param {object} req - HTTP request object.
+ * @param {object} res - HTTP response object.
+ * @param {function} next - Callback to proceed to the next middleware or route handler.
+ */
 const verifyToken = async (req, res, next) => {
-  // Retrieve token from the request headers
-  const token = req.headers["x-access-token"];
-  if (!token) {
-    return res.status(403).json({
-      status: "fail",
-      message: "No token provided",
-    });
-  }
-
   try {
+    // Retrieve the token from the Authorization header
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) {
+      return res.status(401).json({
+        error: "Unauthorized",
+        message: "Token is missing",
+      });
+    }
+
+    // Extract the token from the "Bearer <token>" format
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({
+        error: "Unauthorized",
+        message: "Invalid token format",
+      });
+    }
     // Verify the token using the JWT secret key
     const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
     console.log("Decoded token: ", decoded);
