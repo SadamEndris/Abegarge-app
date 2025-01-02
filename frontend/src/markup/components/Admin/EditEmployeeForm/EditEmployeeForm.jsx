@@ -83,7 +83,7 @@ const EditEmployeeForm = () => {
   };
 
   return (
-    <section className="contact-section ml-5">
+    <section className="contact-section ml-4">
       <div className="auto-container">
         <div className="contact-title">
           <h2>
@@ -97,7 +97,7 @@ const EditEmployeeForm = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="row clearfix">
                     <div className="form-group col-md-12">
-                      <label>Employee email: {formData.employee_email}</label>
+                      <p className="font-weight-bolder">Employee email: {formData.employee_email}</p>
                     </div>
                     <div className="form-group col-md-12">
                       <input
@@ -131,6 +131,7 @@ const EditEmployeeForm = () => {
                         name="company_role_id"
                         value={formData.company_role_id}
                         onChange={handleInputChange}
+                        className="custom-select-box"
                       >
                         <option value={1}>Employee</option>
                         <option value={2}>Manager</option>
