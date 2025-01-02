@@ -4,11 +4,14 @@ import { useAuth } from "../../../../Context/AuthContext";
 import { format } from "date-fns";
 import employeeService from "../../../../services/employee.service";
 import { FaEdit, FaTrash } from "react-icons/fa"; // FontAwesome edit and trash icons
+import { useNavigate } from "react-router-dom";
 const EmployeesList = () => {
   // States to store employee data and error messages
   const [employees, setEmployees] = useState([]);
   const [apiError, setApiError] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState(null);
+
+  const navigate = useNavigate(); // Initialize navigate function
 
   // Getting the logged-in employee's token
   const { employee } = useAuth();
@@ -47,6 +50,10 @@ const EmployeesList = () => {
     fetchEmployees();
   }, [token]);
 
+  // Redirect to EditEmployee page
+  const handleEditClick = (employeeId) => {
+    navigate(`/admin/edit-employee/${employeeId}`);
+  };
   return (
     <>
       {apiError ? (
@@ -97,14 +104,15 @@ const EmployeesList = () => {
                         <FaEdit
                           style={{ cursor: "pointer", marginRight: "10px" }}
                           title="Edit Employee"
+                          onClick={() => handleEditClick(employee.employee_id)}
                         />
                         {/* Delete Icon with onClick event */}
                         <FaTrash
+                          style={{ cursor: "pointer" }}
+                          title="Delete Employee"
                           onClick={() =>
                             handleDeleteClick(employee.employee_id)
                           }
-                          style={{ cursor: "pointer" }}
-                          title="Delete Employee"
                         />
                       </div>
                     </td>

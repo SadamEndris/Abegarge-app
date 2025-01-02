@@ -1,13 +1,13 @@
 const api_url = import.meta.env.VITE_API_URL;
 
 // A function to send post request to create a new employee
-const createEmployee = async (formData, loggedInEmployeeToken) => {
+const createEmployee = async (formData, token) => {
   try {
     const requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": loggedInEmployeeToken,
+        authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(formData),
     };
@@ -35,11 +35,11 @@ const getEmployees = async (token) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": token,
+        authorization: `Bearer ${token}`,
       },
     };
 
-    const response = await fetch(`${api_url}/api/employee`, requestOptions);
+    const response = await fetch(`${api_url}/api/employees`, requestOptions);
 
     if (!response.ok) {
       throw new Error(`Fetch failed with status: ${response.status}`);
@@ -53,10 +53,39 @@ const getEmployees = async (token) => {
   }
 };
 
+// A function to get employee by ID
+const getEmployeeById = async (id, token) => {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await fetch(`${api_url}/api/employee/${id}`, requestOptions);
+  return response;
+};
+
+// A function to update an employee
+const updateEmployee = async (id, formData, token) => {
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(formData),
+  };
+  const response = await fetch(`${api_url}/api/employee/${id}`, requestOptions);
+  return response;
+};
+
 // Export all the functions
 const employeeService = {
   createEmployee,
   getEmployees,
+  getEmployeeById,
+  updateEmployee,
 };
 
 export default employeeService;

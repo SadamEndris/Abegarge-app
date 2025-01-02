@@ -25,6 +25,7 @@ import Header from "./markup/components/Header/Header";
 import Footer from "./markup/components/Footer/Footer";
 // import the PrivateAuthRoute component
 import PrivateAuthRoute from "./markup/components/Auth/PrivateAuthRoute";
+import EditEmployee from "./markup/pages/admin/EditEmployee";
 function App() {
   return (
     <>
@@ -43,8 +44,24 @@ function App() {
             </PrivateAuthRoute>
           }
         />
-        {/* checking directly on the employees page for testing purpose  */}
-        <Route path="/admin/employees" element={<Employees />} />
+        {/* Protected route for employees */}
+        <Route
+          path="/admin/employees"
+          element={
+            <PrivateAuthRoute roles={[2, 3]}>
+              <Employees />
+            </PrivateAuthRoute>
+          }
+        />
+        {/* Route for editing an employee (dynamic path) */}
+        <Route
+          path="/admin/edit-employee/:id"
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <EditEmployee />
+            </PrivateAuthRoute>
+          }
+        />
         <Route
           path="/admin/customers"
           element={
