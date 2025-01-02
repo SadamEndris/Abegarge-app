@@ -51,7 +51,7 @@ async function logIn(req, res, next) {
       active_employee: employee.data.active_employee,
     };
 
-    const token = jwt.sign(payload, jwtSecret, { expiresIn: "1h" });
+    const token = jwt.sign(payload, jwtSecret, { expiresIn: "30d" });
     console.log("Generated token:", token);
 
     // Respond with the token
