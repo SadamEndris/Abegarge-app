@@ -80,12 +80,25 @@ const updateEmployee = async (id, formData, token) => {
   return response;
 };
 
+// A function to Delete an employee by ID (Admin only)
+const deleteEmployee = async (id, token) => {
+  const requestOptions = {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  };
+  return await fetch(`${api_url}/api/employee/${id}`, requestOptions);
+};
+
 // Export all the functions
 const employeeService = {
   createEmployee,
   getEmployees,
   getEmployeeById,
   updateEmployee,
+  deleteEmployee,
 };
 
 export default employeeService;

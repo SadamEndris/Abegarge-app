@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Table, Button } from "react-bootstrap";
+import { Table, Button, Alert } from "react-bootstrap";
 import { useAuth } from "../../../../Context/AuthContext";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import employeeService from "../../../../services/employee.service";
 import { FaEdit, FaTrash } from "react-icons/fa"; // FontAwesome edit and trash icons
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ const EmployeesList = () => {
   const [employees, setEmployees] = useState([]);
   const [apiError, setApiError] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
 
   const navigate = useNavigate(); // Initialize navigate function
 
@@ -54,6 +55,30 @@ const EmployeesList = () => {
   const handleEditClick = (employeeId) => {
     navigate(`/admin/edit-employee/${employeeId}`);
   };
+  // handleDeleteClick function to delete an employeeService
+  const handleDeleteClick = async (employeeId) => {
+    try {
+      const response = await employeeService.deleteEmployee(employeeId, token);
+      if (response.ok) {
+        const data = await response.json();
+        if (data.success) {
+          const updatedEmployees = employees.filter(
+            (employee) => employee.employee_id !== employeeId
+          );
+          setEmployees(updatedEmployees);
+          setSuccessMessage(data.message);
+          setTimeout(() => setSuccessMessage(""), 1000); // Clear message after 1 seconds
+        } else {
+          console.error("Error deleting employee:", data.message);
+        }
+      } else {
+        console.error("Error deleting employee:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error deleting employee:", error);
+    }
+  };
+
   return (
     <>
       {apiError ? (
@@ -70,6 +95,12 @@ const EmployeesList = () => {
             <div className="contact-title">
               <h2>Employees</h2>
             </div>
+            {/* Display Success Message */}
+            {successMessage && (
+              <Alert variant="success" className="mb-4 success-alert">
+                {successMessage}
+              </Alert>
+            )}
             <Table striped bordered hover>
               <thead>
                 <tr>
@@ -110,9 +141,11 @@ const EmployeesList = () => {
                         <FaTrash
                           style={{ cursor: "pointer" }}
                           title="Delete Employee"
-                          onClick={() =>
-                            handleDeleteClick(employee.employee_id)
-                          }
+                          onClick={(e) => {
+                            e.preventDefault(); // Prevent any default behavior
+                            e.stopPropagation(); // Stop the event from bubbling up
+                            handleDeleteClick(employee.employee_id);
+                          }}
                         />
                       </div>
                     </td>
