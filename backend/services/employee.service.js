@@ -289,7 +289,7 @@ const deleteEmployee = async (employeeId) => {
     if (orders.length > 0) {
       return {
         error: true,
-        message: `Cannot delete employee ${employeeId} as they are associated with active orders.`,
+        message: "Cannot delete employee with active orders.",
         status: 400,
       };
     }
@@ -311,20 +311,8 @@ const deleteEmployee = async (employeeId) => {
       [employeeId]
     );
 
-    // Check if the employee record was found and deleted
-    if (employeeResult.affectedRows === 0) {
-      return {
-        error: true,
-        message: "Employee not found",
-        status: 404,
-      };
-    }
-
     // Return success response
-    return {
-      success: true,
-      message: `Deleted employee ${employeeId} successfully`,
-    };
+    return { success: true, message: "Employee deleted successfully." };
   } catch (error) {
     console.error("Error in deleteEmployeeById service:", error);
     return {
