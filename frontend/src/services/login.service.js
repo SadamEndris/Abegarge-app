@@ -1,34 +1,39 @@
-// A function to send the login request to the server
-const api_url = import.meta.env.VITE_API_URL;
+// a function to send the login request to the server
+const backend = import.meta.env.VITE_API_URL;
+
+console.log(backend);
 const logIn = async (formData) => {
   try {
     const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     };
-    console.log('About to send request');
-    console.log(requestOptions.body);
+    // console.log(requestOptions.body);
     const response = await fetch(
-      `${api_url}/api/employee/login`,
+      `${backend}/api/employee/login`,
       requestOptions
     );
+    // console.log(response);
     if (!response.ok) {
-      throw new Error(`Fetch failed with status: ${response.status}`);
+      throw new Error(`Fetch failed: ${response.status}`);
     }
-
     return response;
   } catch (error) {
-    console.error('Fetch failed:', error);
+    console.error("Fetch failed", error);
     throw error;
   }
 };
-// A function to log out the user
+
+// a function to log out the user
+
 const logOut = () => {
-  localStorage.removeItem('employee');
+  localStorage.removeItem("employee");
 };
 
-// Export the logIn function
+// a function to check if the user is logged in
+
+// Export the Login Function
 const loginService = {
   logIn,
   logOut,
