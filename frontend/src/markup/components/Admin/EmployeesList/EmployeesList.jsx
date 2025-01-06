@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
-import { Table, Button, Alert } from "react-bootstrap";
+import { Table, Button, Alert, Pagination } from "react-bootstrap";
 import { useAuth } from "../../../../Context/AuthContext";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import employeeService from "../../../../services/employee.service";
 import { FaEdit, FaTrash } from "react-icons/fa"; // FontAwesome edit and trash icons
 import { useNavigate } from "react-router-dom";
+
 const EmployeesList = () => {
-  // States to store employee data and error messages
   const [employees, setEmployees] = useState([]);
   const [apiError, setApiError] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10); // Number of items per page
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Initialize navigate function
-
-  // Getting the logged-in employee's token
   const { employee } = useAuth();
   let token = employee ? employee.employee_token : null;
 
-  // Fetch employees when the component mounts
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
@@ -26,11 +25,11 @@ const EmployeesList = () => {
         if (!res.ok) {
           setApiError(true);
           if (res.status === 401) {
-            setApiErrorMessage("Please login again");
+            setApiErrorMessage("Please login again.");
           } else if (res.status === 403) {
-            setApiErrorMessage("You are not authorized to access this page");
+            setApiErrorMessage("You are not authorized to access this page.");
           } else {
-            setApiErrorMessage("An error occurred. Please try again later");
+            setApiErrorMessage("An error occurred. Please try again later.");
           }
           return;
         }
@@ -51,11 +50,10 @@ const EmployeesList = () => {
     fetchEmployees();
   }, [token]);
 
-  // Redirect to EditEmployee page
   const handleEditClick = (employeeId) => {
     navigate(`/admin/edit-employee/${employeeId}`);
   };
-  // handleDeleteClick function to delete an employeeService
+
   const handleDeleteClick = async (employeeId) => {
     try {
       const response = await employeeService.deleteEmployee(employeeId, token);
@@ -67,7 +65,7 @@ const EmployeesList = () => {
           );
           setEmployees(updatedEmployees);
           setSuccessMessage(data.message);
-          setTimeout(() => setSuccessMessage(""), 1000); // Clear message after 1 seconds
+          setTimeout(() => setSuccessMessage(""), 2000); // Clear after 2 seconds
         } else {
           console.error("Error deleting employee:", data.message);
         }
@@ -78,6 +76,53 @@ const EmployeesList = () => {
       console.error("Error deleting employee:", error);
     }
   };
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const renderEmployeeRows = () => {
+    // Pagination logic
+    const indexOfLastEmployee = currentPage * itemsPerPage;
+    const indexOfFirstEmployee = indexOfLastEmployee - itemsPerPage;
+    const currentEmployees = employees.slice(
+      indexOfFirstEmployee,
+      indexOfLastEmployee
+    );
+
+    return currentEmployees.map((employee) => (
+      <tr key={employee.employee_id}>
+        <td>{employee.employee_id}</td>
+        <td>{employee.active_employee ? "Yes" : "No"}</td>
+        <td>{employee.employee_first_name}</td>
+        <td>{employee.employee_last_name}</td>
+        <td>{employee.employee_email}</td>
+        <td>{employee.employee_phone}</td>
+        <td>{format(new Date(employee.added_date), "MM-dd-yyyy | kk:mm")}</td>
+        <td>{employee.company_role_name}</td>
+        <td>
+          <div className="edit-delete-icons text-center">
+            <FaEdit
+              style={{ cursor: "pointer", marginRight: "10px" }}
+              title="Edit Employee"
+              onClick={() => handleEditClick(employee.employee_id)}
+            />
+            <FaTrash
+              style={{ cursor: "pointer" }}
+              title="Delete Employee"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleDeleteClick(employee.employee_id);
+              }}
+            />
+          </div>
+        </td>
+      </tr>
+    ));
+  };
+
+  const totalPages = Math.ceil(employees.length / itemsPerPage);
 
   return (
     <>
@@ -95,7 +140,6 @@ const EmployeesList = () => {
             <div className="contact-title">
               <h2>Employees</h2>
             </div>
-            {/* Display Success Message */}
             {successMessage && (
               <Alert variant="success" className="mb-4 success-alert">
                 {successMessage}
@@ -104,6 +148,7 @@ const EmployeesList = () => {
             <Table striped bordered hover>
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>Active</th>
                   <th>First Name</th>
                   <th>Last Name</th>
@@ -114,45 +159,28 @@ const EmployeesList = () => {
                   <th>Edit/Delete</th>
                 </tr>
               </thead>
-              <tbody>
-                {employees.map((employee) => (
-                  <tr key={employee.employee_id}>
-                    <td>{employee.active_employee ? "Yes" : "No"}</td>
-                    <td>{employee.employee_first_name}</td>
-                    <td>{employee.employee_last_name}</td>
-                    <td>{employee.employee_email}</td>
-                    <td>{employee.employee_phone}</td>
-                    <td>
-                      {format(
-                        new Date(employee.added_date),
-                        "MM - dd - yyyy | kk:mm"
-                      )}
-                    </td>
-                    <td>{employee.company_role_name}</td>
-                    <td>
-                      <div className="edit-delete-icons text-center">
-                        {/* Edit Icon with onClick event */}
-                        <FaEdit
-                          style={{ cursor: "pointer", marginRight: "10px" }}
-                          title="Edit Employee"
-                          onClick={() => handleEditClick(employee.employee_id)}
-                        />
-                        {/* Delete Icon with onClick event */}
-                        <FaTrash
-                          style={{ cursor: "pointer" }}
-                          title="Delete Employee"
-                          onClick={(e) => {
-                            e.preventDefault(); // Prevent any default behavior
-                            e.stopPropagation(); // Stop the event from bubbling up
-                            handleDeleteClick(employee.employee_id);
-                          }}
-                        />
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              <tbody>{renderEmployeeRows()}</tbody>
             </Table>
+            {/* Pagination Controls */}
+            <Pagination className="mt-4 text-center justify-content-center">
+              <Pagination.Prev
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
+              {[...Array(totalPages)].map((_, index) => (
+                <Pagination.Item
+                  key={index + 1}
+                  active={index + 1 === currentPage}
+                  onClick={() => handlePageChange(index + 1)}
+                >
+                  {index + 1}
+                </Pagination.Item>
+              ))}
+              <Pagination.Next
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              />
+            </Pagination>
           </div>
         </section>
       )}
