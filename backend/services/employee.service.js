@@ -143,7 +143,6 @@ async function getAllEmployees() {
       INNER JOIN employee_role ON employee.employee_id = employee_role.employee_id 
       INNER JOIN company_roles ON employee_role.company_role_id = company_roles.company_role_id  
       ORDER BY employee.employee_id DESC 
-      LIMIT 10
     `;
 
     // Await the query and get the rows
