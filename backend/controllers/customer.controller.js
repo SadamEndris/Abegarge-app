@@ -1,8 +1,17 @@
 const customerService = require("../services/customer.service");
 
-// Function to create a new customer in the database
+/**
+ * @route POST /api/add-customer
+ * @description Handles customer creation by checking if the email already exists, and if not, adds the new customer to the database.
+ * @access Private - admin only
+ */
 const createCustomer = async (req, res) => {
   // Check if the customer already exists in the database
+  /**
+   * @description Step 1: Check if the customer already exists in the database by email.
+   * @param {string} req.body.customer_email - Customer's email to be checked.
+   * @returns {boolean} - Returns true if customer already exists.
+   */
   const customerExists = await customerService.checkCustomerExistence(
     req.body.customer_email
   );
@@ -20,8 +29,8 @@ const createCustomer = async (req, res) => {
       const result = await customerService.createCustomer(customerData);
 
       // If a conflict occurs (e.g., duplicate email)
-      if (result.error) {
-        return res.status(result.statusCode).json({
+      if (!result || result.error) {
+        return res.status(result?.statusCode).json({
           error: result.error,
           message: result.message,
         });

@@ -2,7 +2,13 @@
 const db = require("../config/db.config");
 const { v4: uuidv4 } = require("uuid"); // Import UUID for generating customer_hash
 
-// Function to check if a customer already exists in the database based on their email
+/**
+ * @function checkCustomerExistence
+ * @description Checks if a customer already exists in the database by email.
+ * @param {string} customer_email - The email address of the customer to check.
+ * @returns {boolean} - Returns true if the customer exists, otherwise false.
+ */
+
 async function checkCustomerExistence(customerEmail) {
   // SQL query to check if a customer with the provided email exists
   const query = "SELECT * FROM customer_identifier WHERE customer_email = ?";
@@ -26,7 +32,12 @@ async function checkCustomerExistence(customerEmail) {
   }
 }
 
-// Function to create a new customer
+/**
+ * @function createCustomer
+ * @description Creates a new customer by inserting their data into the database.
+ * @param {Object} customer - The customer object containing customer data.
+ * @returns {Object} - Returns an object containing the customer ID, or an error message if the operation fails.
+ */
 async function createCustomer(customer) {
   try {
     // Step 1: Generate customer hash
@@ -49,14 +60,22 @@ async function createCustomer(customer) {
     const customer_id = rows.insertId;
 
     // Step 4: Insert into the `customer_info` table
+    // Ensure active_customer_status is provided (we'll default it to 1 for active)
     const insertQuery2 =
       "INSERT INTO customer_info (customer_id, customer_first_name, customer_last_name, active_customer_status) VALUES (?, ?, ?, ?)";
     const rows2 = await db.query(insertQuery2, [
       customer_id,
       customer.customer_first_name,
       customer.customer_last_name,
-      customer.active_customer_status,
+      customer.active_customer_status || 1, // Default active status to 1 if not provided
     ]);
+    // Check if the insert was successful (affectedRows should be 1)
+    if (rows2.affectedRows !== 1) {
+      return {
+        error: "Failed to insert customer information", // Error message
+        statusCode: 500, // Internal server error status code
+      };
+    }
 
     // Return the created customer object with the customer_id
     let createdCustomer = {
