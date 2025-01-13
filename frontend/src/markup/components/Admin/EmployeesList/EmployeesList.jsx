@@ -24,7 +24,7 @@ const EmployeesList = () => {
         const res = await employeeService.getEmployees(token);
         if (!res.ok) {
           setApiError(true);
-          if (res.status === 401) {
+          if (res.status === 401) {  
             setApiErrorMessage("Please login again.");
           } else if (res.status === 403) {
             setApiErrorMessage("You are not authorized to access this page.");
