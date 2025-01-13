@@ -91,7 +91,7 @@ function AddCustomerForm() {
   };
 
   return (
-    <section className="contact-section">
+    <section className="contact-section ml-5">
       <div className="auto-container">
         <div className="contact-title">
           <h2>Add a new customer</h2>
