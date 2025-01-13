@@ -167,7 +167,9 @@ const updateVehicle = async (req, res) => {
   }
 };
 
-const deleteVehicle = async (req, res) => {
+const 
+
+deleteVehicle = async (req, res) => {
   const customer_id = parseInt(req.params.customer_id, 10);
   const vehicle_id = parseInt(req.params.vehicle_id, 10);
 

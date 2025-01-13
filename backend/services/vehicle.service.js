@@ -162,7 +162,7 @@ const deleteVehicle = async (vehicle_id) => {
   try {
     const query = `DELETE FROM customer_vehicle_info WHERE vehicle_id = ?`;
     await db.query(query, [vehicle_id]);
-  } catch (error) {
+  } catch (error) { 
     console.error("Error deleting vehicle:", error);
     throw new Error("Internal Server Error");
   }
