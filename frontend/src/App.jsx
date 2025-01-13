@@ -88,6 +88,14 @@ function App() {
             </PrivateAuthRoute>
           }
         />
+        <Route
+          path="/admin/customers"
+          element={
+            <PrivateAuthRoute roles={[2, 3]}>
+              <Customers />
+            </PrivateAuthRoute>
+          }
+        />
       </Routes>
       <Footer />
     </>

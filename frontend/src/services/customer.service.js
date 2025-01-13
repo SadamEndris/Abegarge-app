@@ -28,9 +28,37 @@ const createCustomer = async (formData, token) => {
   }
 };
 
+// A function to send a get request to get all the employees
+const getCustomers = async (token) => {
+  try {
+    const requestOptions = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    };
+
+    const response = await fetch(
+      `${api_url}/api/all-customers`,
+      requestOptions
+    );
+
+    if (!response.ok) {
+      throw new Error(`Fetch failed with status: ${response.status}`);
+    }
+
+    // Return response
+    return response;
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    throw error;
+  }
+};
 // Export all the functions
 const customerService = {
   createCustomer,
+  getCustomers,
 };
 
 export default customerService;
