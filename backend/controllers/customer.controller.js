@@ -51,8 +51,11 @@ const createCustomer = async (req, res) => {
   }
 };
 
-// Function to get all customers from the database
-
+/**
+ * @route GET /api/all-customers
+ * @description Fetch all customers from the database.
+ * @access Private - Admin only
+ */
 const getAllCustomers = async (req, res) => {
   try {
     // Call service to retrieve all customers

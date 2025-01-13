@@ -88,9 +88,12 @@ async function createCustomer(customer) {
   }
 }
 
-// function to get all customers from the database
+/**
+ * @function getAllCustomers
+ * @description Retrieves all customers from the database, including customer details and their associated information.
+ * @returns {Array|null} - Returns an array of customers if found, or null if no customers exist.
+ */
 
-// Function to fetch all customers limited to the latest 10 customers
 async function getAllCustomers() {
   try {
     const query = `
@@ -99,7 +102,7 @@ async function getAllCustomers() {
       LEFT JOIN customer_info 
       ON customer_identifier.customer_id = customer_info.customer_id 
       ORDER BY customer_identifier.customer_id DESC 
-      LIMIT 10;
+     
     `;
     const rows = await db.query(query); // Execute the query
 

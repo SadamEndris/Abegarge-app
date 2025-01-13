@@ -19,7 +19,11 @@ router.post(
   customerController.createCustomer
 );
 
-// get request for getting all customers from the database
+/**
+ * @route GET /api/all-customers
+ * @description Fetch all customers from the database. Requires admin privileges.
+ * @access Private - Admin only
+ */
 router.get(
   "/api/all-customers",
   verifyToken,
