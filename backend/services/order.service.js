@@ -1,4 +1,4 @@
-const conn = require("../config/db.config");
+const db = require("../config/db.config");
 const { v4: uuidv4 } = require("uuid");
 
 /**
@@ -21,7 +21,7 @@ const createOrder = async (body) => {
         SELECT 1 FROM customer_vehicle_info WHERE vehicle_id = ?
       ) AS valid_vehicle;
     `;
-    const [validationResult] = await conn.query(validateQuery, [
+    const [validationResult] = await db.query(validateQuery, [
       body.employee_id,
       body.customer_id,
       body.vehicle_id,
@@ -41,7 +41,7 @@ const createOrder = async (body) => {
       INSERT INTO orders (employee_id, customer_id, vehicle_id, order_date, active_order, order_hash)
       VALUES (?, ?, ?, CURRENT_TIMESTAMP, ?, ?);
     `;
-    const orderResult = await conn.query(orderQuery, [
+    const orderResult = await db.query(orderQuery, [
       body.employee_id,
       body.customer_id,
       body.vehicle_id,
@@ -56,7 +56,7 @@ const createOrder = async (body) => {
       INSERT INTO order_info (order_id, estimated_completion_date, completion_date, additional_request, notes_for_internal_use, additional_requests_completed)
       VALUES (?, ?, ?, ?, ?, ?);
     `;
-    await conn.query(orderInfoQuery, [
+    await db.query(orderInfoQuery, [
       order_id,
       body.estimated_completion_date,
       body.completion_date || null,
@@ -74,14 +74,14 @@ const createOrder = async (body) => {
       .join(", ");
 
     orderServicesQuery += orderServicesValues;
-    await conn.query(orderServicesQuery);
+    await db.query(orderServicesQuery);
 
     // Step 5: Insert initial order status
     const orderStatusQuery = `
       INSERT INTO order_status (order_id, order_status)
       VALUES (?, 0); -- 0 = Pending
     `;
-    await conn.query(orderStatusQuery, [order_id]);
+    await db.query(orderStatusQuery, [order_id]);
 
     // Return the created order_id
     return order_id;
@@ -126,7 +126,7 @@ ORDER BY orders.order_date DESC;
     `;
 
     // Execute the query
-    const rows = await conn.query(query);
+    const rows = await db.query(query);
 
     return rows;
   } catch (err) {
@@ -178,7 +178,7 @@ const getOrderById = async (orderId) => {
     `;
 
     // Execute the query with the provided orderId
-    const [rows, fields] = await conn.query(query, [orderId]);
+    const [rows, fields] = await db.query(query, [orderId]);
 
     // if no rows are returned, the order does not exist in the database
     if (rows.length === 0) {
@@ -197,8 +197,86 @@ const getOrderById = async (orderId) => {
   }
 };
 
+/**
+ * Service to update an order in the database
+ * @param {Object} orderData - Order details
+ * @returns {boolean} - True if the update is successful, false otherwise
+ */
+const updateOrderService = async (orderData) => {
+  const {
+    order_id,
+    customer_id,
+    employee_id,
+    vehicle_id,
+    order_date,
+    estimated_completion_date,
+    completion_date,
+    order_description,
+    order_completed,
+    order_services,
+  } = orderData;
+
+  try {
+    // Check if the order exists
+    const [orderExists] = await db.query(
+      "SELECT * FROM orders WHERE order_id = ?",
+      [order_id]
+    );
+    if (!orderExists.length) return false;
+
+    // Update the `orders` table
+    await db.query(
+      `
+      UPDATE orders 
+      SET customer_id = ?, employee_id = ?, vehicle_id = ?, order_date = ? 
+      WHERE order_id = ?
+      `,
+      [customer_id, employee_id, vehicle_id, order_date, order_id]
+    );
+
+    // Update the `order_info` table
+    await db.query(
+      `
+      UPDATE order_info
+      SET estimated_completion_date = ?, completion_date = ?, additional_request = ?, additional_requests_completed = ?
+      WHERE order_id = ?
+      `,
+      [
+        estimated_completion_date,
+        completion_date,
+        order_description,
+        order_completed,
+        order_id,
+      ]
+    );
+
+    // Delete existing services for the order
+    await db.query("DELETE FROM order_services WHERE order_id = ?", [order_id]);
+
+    // Insert updated services into the `order_services` table
+    const serviceInsertQuery = `
+      INSERT INTO order_services (order_id, service_id, service_completed)
+      VALUES (?, ?, ?)
+    `;
+    for (const service of JSON.parse(order_services)) {
+      const { service_id, service_completed } = service;
+      await db.query(serviceInsertQuery, [
+        order_id,
+        service_id,
+        service_completed,
+      ]);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error in updateOrderService:", error.message);
+    throw new Error("Failed to update the order.");
+  }
+};
+
 module.exports = {
   createOrder,
   getAllOrders,
   getOrderById,
+  updateOrderService,
 };

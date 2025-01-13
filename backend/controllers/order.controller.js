@@ -120,9 +120,76 @@ const getOrderById = async (req, res) => {
   }
 };
 
+/**
+ * Controller to update an order
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const updateOrderController = async (req, res) => {
+  try {
+    const {
+      order_id,
+      customer_id,
+      employee_id,
+      vehicle_id,
+      order_date,
+      estimated_completion_date,
+      completion_date,
+      order_description,
+      order_completed,
+      order_services,
+    } = req.body;
+
+    // Validate required fields
+    const requiredFields = [
+      "order_id",
+      "customer_id",
+      "employee_id",
+      "vehicle_id",
+      "order_date",
+      "estimated_completion_date",
+      "completion_date",
+      "order_description",
+      "order_completed",
+      "order_services",
+    ];
+
+    for (const field of requiredFields) {
+      if (!req.body[field]) {
+        return res.status(400).json({
+          error: "Bad Request",
+          message: `Please provide all required fields. Missing: ${field}`,
+        });
+      }
+    }
+
+    // Call service to update the order
+    const isUpdated = await orderService.updateOrderService(req.body);
+
+    if (!isUpdated) {
+      return res.status(404).json({
+        error: "Not Found",
+        message: "Order not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Order updated successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error in updateOrderController:", error.message);
+    return res.status(500).json({
+      error: "Internal Server Error",
+      message: "An unexpected error occurred.",
+    });
+  }
+};
+
 // Export the controller functions
 module.exports = {
   createOrder,
   getAllOrders,
   getOrderById,
+  updateOrderController,
 };

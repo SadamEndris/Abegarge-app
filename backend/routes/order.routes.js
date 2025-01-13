@@ -11,4 +11,7 @@ router.get("/api/orders", orderController.getAllOrders);
 // Define the route to get a specific order by ID
 router.get("/api/order/:id", orderController.getOrderById);
 
+// define the route to update a specific order by ID
+router.put("/api/order", orderController.updateOrderController);
+
 module.exports = router;
