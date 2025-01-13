@@ -55,10 +55,43 @@ const getCustomers = async (token) => {
     throw error;
   }
 };
+const getCustomerById = async (id, token) => {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  };
+  const response = await fetch(
+    `${api_url}/api/customers/${id}`,
+    requestOptions
+  );
+  return response;
+};
+
+const updateCustomer = async (id, formData, token) => {
+  const requestOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(formData),
+  };
+  const response = await fetch(
+    `${api_url}/api/update-customer/${id}`,
+    requestOptions
+  );
+  return response;
+};
+
 // Export all the functions
 const customerService = {
   createCustomer,
   getCustomers,
+  getCustomerById,
+  updateCustomer,
 };
 
 export default customerService;

@@ -27,6 +27,7 @@ import Footer from "./markup/components/Footer/Footer";
 import PrivateAuthRoute from "./markup/components/Auth/PrivateAuthRoute";
 import EditEmployee from "./markup/pages/admin/EditEmployee";
 import AddCustomer from "./markup/pages/admin/AddCustomer";
+import EditCustomer from "./markup/pages/admin/EditCustomer";
 function App() {
   return (
     <>
@@ -60,6 +61,15 @@ function App() {
           element={
             <PrivateAuthRoute roles={[3]}>
               <EditEmployee />
+            </PrivateAuthRoute>
+          }
+        />
+        {/* Route for editing an customer (dynamic path) */}
+        <Route
+          path="/admin/edit-customer/:id"
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <EditCustomer />
             </PrivateAuthRoute>
           }
         />

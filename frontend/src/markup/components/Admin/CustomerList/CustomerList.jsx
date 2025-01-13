@@ -71,6 +71,10 @@ const CustomerList = () => {
     setCurrentPage(pageNumber);
   };
 
+  const handleEditClick = (customerId) => {
+    navigate(`/admin/edit-customer/${customerId}`);
+  };
+
   const renderCustomerRows = () => {
     // Pagination logic with filtered customers
     const indexOfLastCustomer = currentPage * itemsPerPage;
@@ -106,7 +110,7 @@ const CustomerList = () => {
             <FaEdit
               style={{ cursor: "pointer", marginRight: "10px" }}
               title="Edit customer"
-              // onClick={() => handleEditClick(customer.customer_id)}
+              onClick={() => handleEditClick(customer.customer_id)}
             />
             <FaExternalLinkAlt
               style={{ cursor: "pointer" }}
