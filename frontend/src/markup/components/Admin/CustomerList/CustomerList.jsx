@@ -167,7 +167,7 @@ const CustomerList = () => {
                   <th>Phone</th>
                   <th>Added Date</th>
                   <th>Active</th>
-                  <th>Edit/Delete</th>
+                  <th>Edit</th>
                 </tr>
               </thead>
               <tbody>{renderCustomerRows()}</tbody>
