@@ -12,7 +12,7 @@ const EmployeesList = () => {
   const [apiErrorMessage, setApiErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10); // Number of items per page
+  const [itemsPerPage] = useState(8); // Number of items per page
   const navigate = useNavigate();
 
   const { employee } = useAuth();
@@ -24,7 +24,7 @@ const EmployeesList = () => {
         const res = await employeeService.getEmployees(token);
         if (!res.ok) {
           setApiError(true);
-          if (res.status === 401) {  
+          if (res.status === 401) {
             setApiErrorMessage("Please login again.");
           } else if (res.status === 403) {
             setApiErrorMessage("You are not authorized to access this page.");
