@@ -28,6 +28,7 @@ import PrivateAuthRoute from "./markup/components/Auth/PrivateAuthRoute";
 import EditEmployee from "./markup/pages/admin/EditEmployee";
 import AddCustomer from "./markup/pages/admin/AddCustomer";
 import EditCustomer from "./markup/pages/admin/EditCustomer";
+import CustomerDetailsPage from "./markup/pages/admin/CustomerDetailsPage";
 function App() {
   return (
     <>
@@ -65,6 +66,14 @@ function App() {
           }
         />
         {/* Route for editing an customer (dynamic path) */}
+        <Route
+          path="/admin/customer-details/:customerId"
+          element={
+            <PrivateAuthRoute roles={[3]}>
+              <CustomerDetailsPage />
+            </PrivateAuthRoute>
+          }
+        />
         <Route
           path="/admin/edit-customer/:id"
           element={

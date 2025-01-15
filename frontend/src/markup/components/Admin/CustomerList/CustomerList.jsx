@@ -75,6 +75,11 @@ const CustomerList = () => {
     navigate(`/admin/edit-customer/${customerId}`);
   };
 
+  // handle detail click
+  const handleDetailClick = (customerId) => {
+    navigate(`/admin/customer-details/${customerId}`);
+  };
+
   const renderCustomerRows = () => {
     // Pagination logic with filtered customers
     const indexOfLastCustomer = currentPage * itemsPerPage;
@@ -115,9 +120,7 @@ const CustomerList = () => {
             <FaExternalLinkAlt
               style={{ cursor: "pointer" }}
               title="View customer details"
-              // onClick={() =>
-              //   navigate(`/customer-details/${customer.customer_id}`)
-              // }
+              onClick={() => handleDetailClick(customer.customer_id)}
             />
           </div>
         </td>
