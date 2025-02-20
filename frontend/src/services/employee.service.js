@@ -60,7 +60,7 @@ const getEmployeeById = async (id, token) => {
     headers: {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
-    },
+    },  
   };
   const response = await fetch(`${api_url}/api/employee/${id}`, requestOptions);
   return response;
