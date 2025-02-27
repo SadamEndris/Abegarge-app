@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useDebounce } from "react-use";
 import { Table, Alert, Pagination } from "react-bootstrap";
 import { useAuth } from "../../../../Context/AuthContext";
 import { format } from "date-fns";
@@ -15,11 +16,16 @@ const CustomerList = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [itemsPerPage] = useState(8); // Number of items per page
   const navigate = useNavigate();
 
   const { employee } = useAuth();
   let token = employee ? employee.employee_token : null;
+
+  // Debounce the search term to prevent making too many API requests
+  // by wating for the user to stop typing for 500ms
+  useDebounce(() => setDebouncedSearchTerm(searchQuery), 500, [searchQuery]);
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -55,7 +61,7 @@ const CustomerList = () => {
   }, [token]);
 
   useEffect(() => {
-    const lowerCaseQuery = searchQuery.toLowerCase();
+    const lowerCaseQuery = debouncedSearchTerm.toLowerCase();
     const filtered = customers.filter((customer) => {
       return (
         customer.customer_first_name.toLowerCase().includes(lowerCaseQuery) ||
@@ -65,7 +71,8 @@ const CustomerList = () => {
       );
     });
     setFilteredCustomers(filtered);
-  }, [searchQuery, customers]);
+    setCurrentPage(1); // Reset to first page when search query changes
+  }, [debouncedSearchTerm, customers]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
