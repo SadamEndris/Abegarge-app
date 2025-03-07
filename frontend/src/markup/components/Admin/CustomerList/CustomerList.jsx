@@ -118,13 +118,15 @@ const CustomerList = () => {
         </td>
         <td>{customer.active_customer_status ? "Yes" : "No"}</td>
         <td>
-          <div className="edit-delete-icons text-center">
+          <div className="d-flex justify-content-center  text-center">
             <FaEdit
-              style={{ cursor: "pointer", marginRight: "10px" }}
+              className="mr-2 text-gray-800"
+              style={{ cursor: "pointer" }}
               title="Edit customer"
               onClick={() => handleEditClick(customer.customer_id)}
             />
             <FaExternalLinkAlt
+              className="text-gray-800"
               style={{ cursor: "pointer" }}
               title="View customer details"
               onClick={() => handleDetailClick(customer.customer_id)}

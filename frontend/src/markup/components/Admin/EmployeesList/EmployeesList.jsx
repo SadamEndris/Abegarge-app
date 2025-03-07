@@ -101,13 +101,15 @@ const EmployeesList = () => {
         <td>{format(new Date(employee.added_date), "MM-dd-yyyy | kk:mm")}</td>
         <td>{employee.company_role_name}</td>
         <td>
-          <div className="edit-delete-icons text-center">
+          <div className="d-flex  justify-content-center text-center ">
             <FaEdit
-              style={{ cursor: "pointer", marginRight: "10px" }}
+              className="mr-2 text-gray-800"
+              style={{ cursor: "pointer" }}
               title="Edit Employee"
               onClick={() => handleEditClick(employee.employee_id)}
             />
             <FaTrash
+              className="text-gray-800"
               style={{ cursor: "pointer" }}
               title="Delete Employee"
               onClick={(e) => {
