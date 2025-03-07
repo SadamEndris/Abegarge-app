@@ -67,7 +67,7 @@ const updateService = async (serviceId, updateData) => {
 
     // Update the service with new data
     const updateQuery = `
-      UPDATE common_services 
+      UPDATE common_services
       SET service_name = ?, service_description = ?
       WHERE service_id = ?;
     `;
@@ -89,9 +89,14 @@ const deleteService = async (serviceId) => {
       return "NOT_FOUND"; // Service with the specified ID not found
     }
 
-    // Delete the service
+    // Delete dependent rows from order_services first
+    const deleteOrderServicesQuery = `DELETE FROM order_services WHERE service_id = ?`;
+    await db.query(deleteOrderServicesQuery, [serviceId]);
+
+    // Now delete the service from common_services
     const deleteQuery = `DELETE FROM common_services WHERE service_id = ?`;
     await db.query(deleteQuery, [serviceId]);
+
     return true;
   } catch (error) {
     console.error("Error deleting service:", error);
