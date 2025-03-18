@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import loginService from "../../../services/login.service";
+import { useAuth } from "./../../../Context/AuthContext";
 
 function LoginForm() {
   // const navigate = useNavigate();
@@ -10,6 +11,8 @@ function LoginForm() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [serverError, setServerError] = useState("");
+
+  const { isAdmin } = useAuth();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -59,14 +62,13 @@ function LoginForm() {
             console.log(response.data);
             localStorage.setItem("employee", JSON.stringify(response.data));
           }
-          // Redirect the user to the dashboard
-          // navigate('/admin');
-          // console.log(location);
           if (location.pathname === "/login") {
-            // navigate('/admin');
-            // window.location.replace('/admin');
-            // To home for now
-            window.location.replace("/");
+            // if the user is admin. Redirect to admin page
+            if (isAdmin) {
+              window.location.replace("/admin");
+            } else {
+              window.location.replace("/");
+            }
           } else {
             window.location.reload();
           }
