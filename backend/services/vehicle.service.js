@@ -34,8 +34,8 @@ const addVehicle = async (vehicleData) => {
 
   try {
     const query = `
-      INSERT INTO customer_vehicle_info 
-      (customer_id, vehicle_model, vehicle_year, vehicle_make, vehicle_type, 
+      INSERT INTO customer_vehicle_info
+      (customer_id, vehicle_model, vehicle_year, vehicle_make, vehicle_type,
       vehicle_mileage, vehicle_serial, vehicle_tag, vehicle_color)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
     `;
@@ -57,6 +57,21 @@ const addVehicle = async (vehicleData) => {
   }
 };
 
+// Function to retrieve all vehicles
+// Service to get all vehicles
+async function getAllVehicles() {
+  try {
+    const query = `
+      SELECT * FROM customer_vehicle_info;
+    `;
+    const vehicles = await db.query(query);
+    return vehicles;
+  } catch (error) {
+    console.error("Error retrieving vehicles:", error);
+    throw new Error("Internal Server Error");
+  }
+}
+
 // Function to retrieve all vehicles for a specific customer
 const getVehiclesByCustomerId = async (customer_id) => {
   try {
@@ -75,15 +90,14 @@ const getVehiclesByCustomerId = async (customer_id) => {
 };
 
 // Function to retrieve a specific vehicle by customer_id and vehicle_id
-const getVehicleById = async (customer_id, vehicle_id) => {
+const getVehicleById = async (vehicle_id) => {
   try {
     const query = `
-      SELECT vehicle_id, customer_id, vehicle_year, vehicle_make, vehicle_model,
-             vehicle_type, vehicle_mileage, vehicle_tag, vehicle_serial, vehicle_color
+      SELECT *
       FROM customer_vehicle_info
-      WHERE customer_id = ? AND vehicle_id = ?;
+      WHERE  vehicle_id = ?;
     `;
-    const [vehicle] = await db.query(query, [customer_id, vehicle_id]);
+    const [vehicle] = await db.query(query, [vehicle_id]);
     return vehicle || null; // Return vehicle if found, otherwise null
   } catch (error) {
     console.error("Error retrieving vehicle:", error);
@@ -92,10 +106,10 @@ const getVehicleById = async (customer_id, vehicle_id) => {
 };
 
 // Function to check if a vehicle exists for a specific customer_id and vehicle_id
-const checkVehicleExists = async (vehicle_id, customer_id) => {
+const checkVehicleExists = async (vehicle_id) => {
   try {
-    const query = `SELECT vehicle_id FROM customer_vehicle_info WHERE vehicle_id = ? AND customer_id = ?`;
-    const [vehicle] = await db.query(query, [vehicle_id, customer_id]);
+    const query = `SELECT vehicle_id FROM customer_vehicle_info WHERE vehicle_id = ? `;
+    const [vehicle] = await db.query(query, [vehicle_id]);
     return !!vehicle; // Return true if vehicle exists, otherwise false
   } catch (error) {
     console.error("Error checking vehicle:", error);
@@ -104,10 +118,8 @@ const checkVehicleExists = async (vehicle_id, customer_id) => {
 };
 
 // Function to update an existing vehicle
-const updateVehicle = async (vehicleData) => {
+const updateVehicle = async (vehicle_id, vehicleData) => {
   const {
-    vehicle_id,
-    customer_id,
     vehicle_model,
     vehicle_year,
     vehicle_make,
@@ -121,10 +133,10 @@ const updateVehicle = async (vehicleData) => {
   try {
     const query = `
       UPDATE customer_vehicle_info
-      SET vehicle_model = ?, vehicle_year = ?, vehicle_make = ?, 
-          vehicle_type = ?, vehicle_mileage = ?, vehicle_serial = ?, 
+      SET vehicle_model = ?, vehicle_year = ?, vehicle_make = ?,
+          vehicle_type = ?, vehicle_mileage = ?, vehicle_serial = ?,
           vehicle_tag = ?, vehicle_color = ?
-      WHERE vehicle_id = ? AND customer_id = ?;
+      WHERE vehicle_id = ?
     `;
 
     await db.query(query, [
@@ -137,22 +149,9 @@ const updateVehicle = async (vehicleData) => {
       vehicle_tag,
       vehicle_color,
       vehicle_id,
-      customer_id,
     ]);
   } catch (error) {
     console.error("Error updating vehicle:", error);
-    throw new Error("Internal Server Error");
-  }
-};
-
-// Function to check if a vehicle belongs to a specific customer
-const checkVehicleBelongsToCustomer = async (vehicle_id, customer_id) => {
-  try {
-    const query = `SELECT vehicle_id FROM customer_vehicle_info WHERE vehicle_id = ? AND customer_id = ?`;
-    const [vehicle] = await db.query(query, [vehicle_id, customer_id]);
-    return !!vehicle; // Return true if vehicle exists for the specified customer, otherwise false
-  } catch (error) {
-    console.error("Error checking vehicle ownership:", error);
     throw new Error("Internal Server Error");
   }
 };
@@ -162,7 +161,7 @@ const deleteVehicle = async (vehicle_id) => {
   try {
     const query = `DELETE FROM customer_vehicle_info WHERE vehicle_id = ?`;
     await db.query(query, [vehicle_id]);
-  } catch (error) { 
+  } catch (error) {
     console.error("Error deleting vehicle:", error);
     throw new Error("Internal Server Error");
   }
@@ -175,6 +174,6 @@ module.exports = {
   getVehicleById,
   checkVehicleExists,
   updateVehicle,
-  checkVehicleBelongsToCustomer,
   deleteVehicle,
+  getAllVehicles,
 };
