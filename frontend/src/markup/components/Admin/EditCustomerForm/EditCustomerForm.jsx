@@ -26,15 +26,13 @@ const EditCustomerForm = () => {
     const fetchCustomerDetails = async () => {
       setIsLoading(true);
       try {
-        const res = await customerService.getCustomers(token); // Fetch all customers
+        const res = await customerService.getCustomerById(id, token); // Fetch all customers
         const data = await res.json();
-        console.log(data, "customer data");
+        // console.log(data, "customer data");
 
         if (res.ok && data.success) {
-          const customer = data.data.find(
-            (c) => c.customer_id === parseInt(id)
-          );
-
+          const customer = data.data;
+          // console.log(customer, "customer data");
           if (customer) {
             setFormData({
               customer_first_name: customer.customer_first_name || "",

@@ -121,8 +121,9 @@ const getAllCustomerVehicles = async (req, res) => {
     }
 
     return res.status(200).json({
+      status: "success",
       customer_id: customer_id,
-      vehicles: vehicles,
+      data: vehicles,
     });
   } catch (error) {
     console.error("Error in controller:", error);

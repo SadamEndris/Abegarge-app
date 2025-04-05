@@ -1,0 +1,91 @@
+.customerDetailsContainer {
+  display: flex;
+  background-color: #f9f9f9;
+  padding: 20px;
+}
+
+.verticalMenu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  width: 120px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: hsl(0, 100%, 51%);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.verticalLine {
+  width: 1px;
+  height: 100px;
+  background-color: #d6d4d4;
+}
+
+.customerDetailsContent {
+  flex: 1;
+}
+
+.customerInfo,
+.customerVehicles,
+.customerOrders {
+  margin-bottom: 40px;
+}
+
+.customerInfo h3 {
+  font-size: 20px;
+  color: #001659;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.customerInfo p {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.editIcon {
+  cursor: pointer;
+  color: #007bff;
+  /* margin-left: 1px; */
+}
+
+.customerVehicles h4,
+.customerOrders h4 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #001659;
+  font-weight: 700;
+}
+
+.customerVehicles ul,
+.customerOrders ul {
+  list-style: none;
+  padding: 0;
+}
+
+.customerVehicles li,
+.customerOrders li {
+  margin-bottom: 5px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 18px;
+  text-align: center;
+}

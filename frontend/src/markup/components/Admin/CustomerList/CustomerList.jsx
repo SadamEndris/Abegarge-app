@@ -83,8 +83,8 @@ const CustomerList = () => {
   };
 
   // handle detail click
-  const handleDetailClick = (customerId) => {
-    navigate(`/admin/customer-details/${customerId}`);
+  const handleDetailClick = (customer_id) => {
+    navigate(`/admin/customer-details/${customer_id}`);
   };
 
   const renderCustomerRows = () => {
@@ -118,16 +118,14 @@ const CustomerList = () => {
         </td>
         <td>{customer.active_customer_status ? "Yes" : "No"}</td>
         <td>
-          <div className="d-flex justify-content-center  text-center">
+          <div className="d-flex justify-content-center align-items-center text-center">
             <FaEdit
-              className="mr-2 text-gray-800"
-              style={{ cursor: "pointer" }}
+              className="mr-2 text-gray-400 cursor-pointer text-base"
               title="Edit customer"
               onClick={() => handleEditClick(customer.customer_id)}
             />
             <FaExternalLinkAlt
-              className="text-gray-800"
-              style={{ cursor: "pointer" }}
+              className="text-gray-400  cursor-pointer "
               title="View customer details"
               onClick={() => handleDetailClick(customer.customer_id)}
             />
