@@ -6,7 +6,9 @@ import logo from "../../../assets/images/logo.png";
 import loginService from "../../../services/login.service";
 // import the custom context hook
 import { useAuth } from "../../../Context/AuthContext";
+import useStickyHeader from "./StickyHeader";
 function Header() {
+  useStickyHeader();
   // Use the custom hook to access the data in the context
   const { isLogged, setIsLogged, employee } = useAuth();
   // console.log(useAuth());
@@ -52,9 +54,9 @@ function Header() {
             <div className="inner-container">
               <div className="logo-box">
                 <div className="logo">
-                  <a href="/">
+                  <Link href="/">
                     <img src={logo} alt="" />
-                  </a>
+                  </Link>
                 </div>
               </div>
               <div className="right-column">
@@ -64,21 +66,21 @@ function Header() {
                   </div>
                   <nav className="main-menu navbar-expand-md navbar-light">
                     <div
-                      className="collapse navbar-collapse show clearfix"
+                      className=" navbar-collapse show clearfix"
                       id="navbarSupportedContent"
                     >
                       <ul className="navigation">
-                        <li className="dropdown">
-                          <a href="/">Home</a>
-                        </li>
-                        <li className="dropdown">
-                          <a href="/about">About Us</a>
-                        </li>
-                        <li className="dropdown">
-                          <a href="/services">Services</a>
+                        <li>
+                          <Link to="/">Home</Link>
                         </li>
                         <li>
-                          <a href="/contact">Contact Us</a>
+                          <Link to="/about">About Us</Link>
+                        </li>
+                        <li>
+                          <Link to="/services">Services</Link>
+                        </li>
+                        <li>
+                          <Link to="/contact">Contact Us</Link>
                         </li>
                       </ul>
                     </div>
@@ -112,9 +114,9 @@ function Header() {
               <div className="inner-container">
                 <div className="logo-box">
                   <div className="logo">
-                    <a href="/">
-                      <img src="assets/images/custom/logo.png" alt="" />
-                    </a>
+                    <Link href="/">
+                      <img src={logo} alt="" />
+                    </Link>
                   </div>
                 </div>
                 <div className="right-column">
@@ -123,13 +125,42 @@ function Header() {
                       <img src="assets/images/icons/icon-bar.png" alt="" />
                     </div>
 
-                    <nav className="main-menu navbar-expand-md navbar-light"></nav>
+                    <nav className="main-menu navbar-expand-md navbar-light">
+                      <ul className="navigation">
+                        <li>
+                          <Link href="/">Home</Link>
+                        </li>
+                        <li>
+                          <Link href="/about">About Us</Link>
+                        </li>
+                        <li>
+                          <Link href="/services">Services</Link>
+                        </li>
+                        <li>
+                          <Link href="/contact">Contact Us</Link>
+                        </li>
+                      </ul>
+                    </nav>
                   </div>
                   <div className="search-btn"></div>
                   <div className="link-btn">
-                    <a href="/login" className="theme-btn btn-style-one">
-                      Login
-                    </a>
+                    {isLogged ? (
+                      <div className="link-btn">
+                        <Link
+                          to="/"
+                          className="theme-btn btn-style-one blue"
+                          onClick={logOut}
+                        >
+                          Log out
+                        </Link>
+                      </div>
+                    ) : (
+                      <div className="link-btn">
+                        <Link to="/login" className="theme-btn btn-style-one">
+                          Login
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

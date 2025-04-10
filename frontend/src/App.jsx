@@ -29,14 +29,19 @@ import EditEmployee from "./markup/pages/admin/EditEmployee";
 import AddCustomer from "./markup/pages/admin/AddCustomer";
 import EditCustomer from "./markup/pages/admin/EditCustomer";
 import CustomerDetails from "./markup/pages/admin/CustomerDetails";
-import Services from "./markup/pages/admin/Services";
+import Services from "./markup/pages/Services";
 import Admin from "./markup/pages/admin/Admin";
+import AboutUs from "./markup/pages/AboutUs";
+import Contact from "./markup/pages/Contact";
 function App() {
   return (
     <>
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
         {/* authorized routes */}
