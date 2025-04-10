@@ -7,26 +7,26 @@
 
 
 
-* 1. imported styles 
-* 2. miscelnious styles 
+* 1. imported styles
+* 2. miscelnious styles
 * 3. header styles
-* 4. banner styles 
-* 5. about styles 
-* 6. service styles 
-* 7. team styles 
+* 4. banner styles
+* 5. about styles
+* 6. service styles
+* 7. team styles
 * 8. testimonial styles
-* 9. estimate styles 
-* 10. fact styles 
-* 11. main footer styles 
-* 12. why choose styles 
-* 13. welcome styles 
-* 14. project styles 
-* 15. page title styles 
-* 16. blog styles 
-* 17. error styles 
-* 18. commingsoon styles 
-* 19. comment form styles 
-* 20. contact styles 
+* 9. estimate styles
+* 10. fact styles
+* 11. main footer styles
+* 12. why choose styles
+* 13. welcome styles
+* 14. project styles
+* 15. page title styles
+* 16. blog styles
+* 17. error styles
+* 18. commingsoon styles
+* 19. comment form styles
+* 20. contact styles
 
 
 
@@ -34,7 +34,7 @@
 ||||||||||||||||||||||||||||            End TABLE OF CONTENT                ||||||||||||||||||||||||||||||||||||
 ****************************************************************************************************************/
 
-/*** 
+/***
 
 ====================================================================
             Fonts
@@ -54,7 +54,7 @@
 @import url("swiper.min.css");
 @import url("rtl.css");
 
-/*** 
+/***
 
 ====================================================================
     Reset
@@ -71,7 +71,7 @@
   line-height: inherit;
 }
 
-/*** 
+/***
 
 ====================================================================
     Global Settings
@@ -388,7 +388,7 @@ img {
   padding-bottom: 50px !important;
 }
 
-/*** 
+/***
 
 ====================================================================
     Scroll To Top style
@@ -1036,7 +1036,7 @@ img {
   display: none;
 }
 
-/*** 
+/***
 
 ====================================================================
     Search Popup
@@ -1185,7 +1185,7 @@ img {
   box-shadow: none;
 }
 
-/*** 
+/***
 
 ====================================================================
                 Sticky Header
@@ -1249,7 +1249,7 @@ img {
   bottom: 20px;
 }
 
-/*** 
+/***
 
 ====================================================================
             Mobile Menu
@@ -1751,7 +1751,7 @@ img {
   transform: rotate(45deg);
 }
 
-/*** 
+/***
 
 ====================================================================
         Banner Section
@@ -2989,10 +2989,12 @@ img {
 .cta-section {
   position: relative;
   background-color: #f9f9f9;
-  padding-bottom: 100px;
+  padding: 100px 0;
 }
 
 .cta-section .wrapper-box {
+  width: 80%;
+  margin: 0 auto;
   position: relative;
   padding: 37px 50px 13px;
 }
@@ -3006,14 +3008,14 @@ img {
 
 .cta-section h3 {
   position: relative;
-  font-size: 35px;
+  font-size: 1.5em;
   font-weight: 700;
   color: #fff;
 }
 
 .cta-section .text {
   color: #fff;
-  font-size: 18px;
+  font-size: 0.7em;
   margin-bottom: 20px;
 }
 
@@ -3026,7 +3028,7 @@ img {
 
 .cta-section .phone {
   position: relative;
-  font-size: 42px;
+  font-size: 2.5em;
   font-weight: 700;
   color: #fff;
   margin-right: 30px;
@@ -3958,7 +3960,7 @@ img {
   transform: rotateX(180deg);
 }
 
-/*** 
+/***
 
 ====================================================================
     Page Title
@@ -4222,7 +4224,7 @@ img {
   padding: 100px 0 40px;
 }
 
-/*** 
+/***
 
 ====================================================================
     Sidebar Page Container
@@ -4640,7 +4642,7 @@ img {
   margin-bottom: 20px;
 }
 
-/*** 
+/***
 
 ====================================================================
     Accordion Style
@@ -5294,7 +5296,7 @@ img {
   font-style: italic;
 }
 
-/*** 
+/***
 
 ====================================================================
     Countdown style
@@ -5474,7 +5476,7 @@ img {
   margin-bottom: 30px;
 }
 
-/*** 
+/***
 
 ====================================================================
     Sidebar Page Container
@@ -5712,7 +5714,7 @@ img {
   color: #ffffff;
 }
 
-/*** 
+/***
 
 ====================================================================
     Styled Pagination
@@ -5761,7 +5763,7 @@ img {
   background-color: #172b56;
 }
 
-/*** 
+/***
 
 ====================================================================
     Comments Area
@@ -5921,7 +5923,7 @@ img {
   margin-bottom: 50px;
 }
 
-/*** 
+/***
 
 ====================================================================
     Comment Form
@@ -6017,7 +6019,7 @@ img {
   margin-bottom: 35px;
 }
 
-/*** 
+/***
 
 ====================================================================
     Contact Section

@@ -278,3 +278,7 @@ input:disabled {
   margin: 0;
   border-radius: 5px;
 }
+
+.banner-container {
+  padding: 230px 0 180px;
+}
