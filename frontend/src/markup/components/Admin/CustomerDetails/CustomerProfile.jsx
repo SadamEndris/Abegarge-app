@@ -153,7 +153,7 @@ const CustomerProfile = () => {
             </Button>
             <Button
               variant="danger"
-              className="mb-5 rounded-circle"
+              className="mb-48 rounded-circle"
               style={{
                 width: "100px",
                 height: "100px",

@@ -128,16 +128,16 @@ function Header() {
                     <nav className="main-menu navbar-expand-md navbar-light">
                       <ul className="navigation">
                         <li>
-                          <Link href="/">Home</Link>
+                          <Link to="/">Home</Link>
                         </li>
                         <li>
-                          <Link href="/about">About Us</Link>
+                          <Link to="/about">About Us</Link>
                         </li>
                         <li>
-                          <Link href="/services">Services</Link>
+                          <Link to="/services">Services</Link>
                         </li>
                         <li>
-                          <Link href="/contact">Contact Us</Link>
+                          <Link to="/contact">Contact Us</Link>
                         </li>
                       </ul>
                     </nav>
