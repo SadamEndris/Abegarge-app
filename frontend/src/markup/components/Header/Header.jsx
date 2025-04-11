@@ -10,7 +10,7 @@ import useStickyHeader from "./StickyHeader";
 function Header() {
   useStickyHeader();
   // Use the custom hook to access the data in the context
-  const { isLogged, setIsLogged, employee } = useAuth();
+  const { isLogged, setIsLogged, employee, isAdmin } = useAuth();
   // console.log(useAuth());
 
   // Log out event handler function
@@ -82,6 +82,12 @@ function Header() {
                         <li>
                           <Link to="/contact">Contact Us</Link>
                         </li>
+                        {/* Only show this if user is admin */}
+                        {isAdmin && (
+                          <li>
+                            <Link to="/admin">Admin Dashboard</Link>
+                          </li>
+                        )}
                       </ul>
                     </div>
                   </nav>
@@ -139,6 +145,13 @@ function Header() {
                         <li>
                           <Link to="/contact">Contact Us</Link>
                         </li>
+
+                        {/* Only show this if user is admin */}
+                        {isAdmin && (
+                          <li>
+                            <Link to="/admin">Admin Dashboard</Link>
+                          </li>
+                        )}
                       </ul>
                     </nav>
                   </div>

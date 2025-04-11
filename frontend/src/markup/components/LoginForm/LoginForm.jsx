@@ -1,18 +1,17 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import loginService from "../../../services/login.service";
-import { useAuth } from "./../../../Context/AuthContext";
+import { jwtDecode } from "jwt-decode";
 
 function LoginForm() {
-  // const navigate = useNavigate();
-  const location = useLocation();
   const [employee_email, setEmail] = useState("");
   const [employee_password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [serverError, setServerError] = useState("");
 
-  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -48,14 +47,14 @@ function LoginForm() {
       employee_email,
       employee_password,
     };
-    console.log(formData);
+    // console.log(formData);
     // Call the service
     const loginEmployee = loginService.logIn(formData);
-    console.log(loginEmployee);
+    // console.log(loginEmployee);
     loginEmployee
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.status === "success") {
           // Save the user in the local storage
           if (response.data.employee_token) {
@@ -63,11 +62,17 @@ function LoginForm() {
             localStorage.setItem("employee", JSON.stringify(response.data));
           }
           if (location.pathname === "/login") {
-            // if the user is admin. Redirect to admin page
-            if (isAdmin) {
-              window.location.replace("/admin");
+            // Decode the token
+            const decoded = jwtDecode(response.data.employee_token);
+            console.log("Decoded JWT:", decoded); // Check what's inside
+
+            // Example: Check role (assume it's inside decoded.role or decoded.employee_role)
+            const role = decoded?.employee_role;
+
+            if (role === 3) {
+              navigate("/admin");
             } else {
-              window.location.replace("/");
+              navigate("/");
             }
           } else {
             window.location.reload();

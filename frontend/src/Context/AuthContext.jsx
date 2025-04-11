@@ -3,6 +3,9 @@
 
 // Import React and the necessary hooks (useState, useEffect, useContext)
 import React, { useState, useEffect, useContext } from "react";
+
+import { jwtDecode } from "jwt-decode";
+
 // Import the getAuth function from the util folder, which handles authentication logic
 import getAuth from "../util/auth";
 
@@ -23,7 +26,6 @@ export const AuthProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false);
   // State to store the current employee information
   const [employee, setEmployee] = useState(null);
-
   // Create a value object to pass down the authentication states and functions via context
   const value = {
     isLogged, // Whether the user is logged in
